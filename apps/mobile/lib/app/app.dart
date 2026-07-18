@@ -1,6 +1,5 @@
 import 'package:clubhaus_mobile/app/theme/app_theme.dart';
-import 'package:clubhaus_mobile/features/today/data/today_repository.dart';
-import 'package:clubhaus_mobile/features/today/presentation/today_screen.dart';
+import 'package:clubhaus_mobile/features/coach/presentation/coach_shell.dart';
 import 'package:flutter/material.dart';
 
 class ClubhausApp extends StatelessWidget {
@@ -12,7 +11,7 @@ class ClubhausApp extends StatelessWidget {
       title: 'BASE11',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      home: const TodayScreen(repository: PreviewTodayRepository()),
+      home: const CoachShell(),
     );
   }
 }

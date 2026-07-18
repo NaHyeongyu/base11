@@ -21,4 +21,3 @@ class PreviewTodayRepository implements TodayRepository {
     );
   }
 }
-

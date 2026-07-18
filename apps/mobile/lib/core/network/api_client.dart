@@ -11,12 +11,15 @@ class ApiException implements Exception {
 }
 
 class ApiClient {
-  ApiClient({HttpClient? httpClient}) : _httpClient = httpClient ?? HttpClient();
+  ApiClient({HttpClient? httpClient})
+    : _httpClient = httpClient ?? HttpClient();
 
   final HttpClient _httpClient;
 
   Future<Object?> get(String path) async {
-    final request = await _httpClient.getUrl(Uri.parse('${AppConfig.apiBaseUrl}$path'));
+    final request = await _httpClient.getUrl(
+      Uri.parse('${AppConfig.apiBaseUrl}$path'),
+    );
     request.headers.set(HttpHeaders.acceptHeader, 'application/json');
     final response = await request.close();
     final body = await response.transform(utf8.decoder).join();
@@ -30,4 +33,3 @@ class ApiClient {
 
   void close() => _httpClient.close(force: true);
 }
-

@@ -15,6 +15,7 @@ const navigation: Array<{ href: string; label: string; icon: IconName }> = [
   { href: "/feedback", label: "피드백", icon: "feedback" },
   { href: "/matches", label: "경기 기록", icon: "match" },
   { href: "/roster", label: "선수단", icon: "users" },
+  { href: "/team", label: "팀 정보", icon: "shield" },
 ];
 
 export function CoachShell({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -30,11 +31,11 @@ export function CoachShell({ children }: Readonly<{ children: React.ReactNode }>
           <button className="sidebar-close" onClick={() => setOpen(false)} aria-label="메뉴 닫기"><Icon name="close" /></button>
         </div>
 
-        <button className="team-selector">
+        <Link className={`team-selector ${pathname === "/team" ? "is-active" : ""}`} href="/team" onClick={() => setOpen(false)}>
           <span className="team-crest">A</span>
           <span><small>2026 시즌</small><strong>FC 안양 U18</strong></span>
           <Icon name="chevron" size={16} />
-        </button>
+        </Link>
 
         <nav className="coach-nav" aria-label="지도자 메뉴">
           <p>TEAM MANAGEMENT</p>

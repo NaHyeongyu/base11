@@ -21,4 +21,3 @@ class TodaySession {
   final String mission;
   final String notice;
 }
-
