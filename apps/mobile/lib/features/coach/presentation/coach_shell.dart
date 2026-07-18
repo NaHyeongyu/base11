@@ -9,7 +9,9 @@ import 'package:clubhaus_mobile/features/coach/presentation/coach_schedule_scree
 import 'package:flutter/material.dart';
 
 class CoachShell extends StatefulWidget {
-  const CoachShell({super.key});
+  const CoachShell({required this.onChangeRole, super.key});
+
+  final VoidCallback onChangeRole;
 
   @override
   State<CoachShell> createState() => _CoachShellState();
@@ -49,8 +51,9 @@ class _CoachShellState extends State<CoachShell> {
                   snapshot: CoachPreviewData.snapshot,
                   controller: _controller,
                 ),
-                const CoachManagementScreen(
+                CoachManagementScreen(
                   snapshot: CoachPreviewData.snapshot,
+                  onChangeRole: widget.onChangeRole,
                 ),
               ],
             ),

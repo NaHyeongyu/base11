@@ -4,9 +4,14 @@ import 'package:clubhaus_mobile/features/coach/presentation/widgets/coach_widget
 import 'package:flutter/material.dart';
 
 class CoachManagementScreen extends StatelessWidget {
-  const CoachManagementScreen({required this.snapshot, super.key});
+  const CoachManagementScreen({
+    required this.snapshot,
+    required this.onChangeRole,
+    super.key,
+  });
 
   final CoachTeamSnapshot snapshot;
+  final VoidCallback onChangeRole;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +34,12 @@ class CoachManagementScreen extends StatelessWidget {
               const SizedBox(height: 26),
               const CoachSection(title: '계정 및 팀 설정', child: _SettingsMenu()),
               const SizedBox(height: 18),
+              OutlinedButton.icon(
+                onPressed: onChangeRole,
+                icon: const Icon(Icons.swap_horiz_rounded, size: 18),
+                label: const Text('지도자·선수·학부모 화면 전환'),
+              ),
+              const SizedBox(height: 8),
               Center(
                 child: TextButton(
                   onPressed: () {},
