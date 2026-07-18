@@ -1,0 +1,47 @@
+# Local tool and package caches
+.toolchains/
+.local-home/
+.cache/
+.pnpm-store/
+.npm/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Node
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+ios/Pods/
+ios/.symlinks/
+android/.gradle/
+
+# IDE and operating system
+.DS_Store
+.idea/
+.vscode/
+*.iml
+

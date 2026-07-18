@@ -1,0 +1,64 @@
+{
+  "runId": "yft-mvp-001",
+  "fileKey": "JgxTOlLvhVo2meOQ4zLtAT",
+  "fileUrl": "https://www.figma.com/design/JgxTOlLvhVo2meOQ4zLtAT",
+  "phase": "complete",
+  "step": "done",
+  "entities": {
+    "collections": {
+      "primitives": "VariableCollectionId:2:2",
+      "color": "VariableCollectionId:2:3",
+      "spacing": "VariableCollectionId:2:4",
+      "radius": "VariableCollectionId:2:5"
+    },
+    "variables": {},
+    "pages": {
+      "cover": "0:1",
+      "overview": "2:62",
+      "personas": "2:63",
+      "ia": "2:64",
+      "flows": "2:65",
+      "inventory": "2:66",
+      "foundations": "2:67",
+      "components": "2:69",
+      "player": "2:71",
+      "coachMobile": "2:72",
+      "coachDesktop": "33:2",
+      "parent": "2:73",
+      "interactions": "2:74",
+      "data": "2:75",
+      "edgeCases": "2:76"
+    },
+    "components": {
+      "button": "6:12",
+      "iconButton": "15:9",
+      "statusChip": "7:14",
+      "appBar": "8:19",
+      "bottomNavigation": "9:56",
+      "contentCard": "10:24",
+      "attendanceControl": "11:40",
+      "memberRow": "12:28",
+      "emptyState": "13:24",
+      "alertBanner": "14:16",
+      "desktopSidebar": "36:754",
+      "desktopTopBar": "37:5",
+      "desktopSummaryCard": "38:18",
+      "desktopDataRow": "39:29"
+    },
+    "frames": {
+      "coachDesktopRoot": "40:2",
+      "coachDesktopKD01": "41:4",
+      "coachDesktopKD02": "41:80",
+      "coachDesktopKD03": "42:119",
+      "coachDesktopKD04": "42:194",
+      "coachDesktopKD05": "43:232",
+      "coachDesktopKD06": "43:306",
+      "coachDesktopKD07": "44:344",
+      "coachDesktopKD08": "44:418",
+      "coachDesktopKD09": "45:456",
+      "coachDesktopKD10": "45:530"
+    }
+  },
+  "pendingValidations": [],
+  "completedSteps": ["phase0", "phase1", "phase2", "phase3", "phase4", "responsive-phase0", "responsive-phase1", "responsive-phase2", "responsive-phase3", "responsive-phase4"]
+}
