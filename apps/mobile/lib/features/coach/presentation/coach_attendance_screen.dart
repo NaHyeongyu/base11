@@ -151,7 +151,7 @@ class _AttendanceHero extends StatelessWidget {
           const SizedBox(height: 6),
           const Text(
             '안양 보조구장 · 17:40 집합',
-            style: TextStyle(color: Color(0xFF98A2B3), fontSize: 11),
+            style: TextStyle(color: Color(0xFF98A2B3), fontSize: 12),
           ),
           const SizedBox(height: 20),
           Row(
@@ -209,7 +209,7 @@ class _HeroMetric extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
             color: Color(0xFF98A2B3),
-            fontSize: 9,
+            fontSize: 12,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -235,7 +235,7 @@ class _FilterChip extends StatelessWidget {
     showCheckmark: false,
     labelStyle: TextStyle(
       color: selected ? Colors.white : AppColors.muted,
-      fontSize: 11,
+      fontSize: 12,
       fontWeight: FontWeight.w800,
     ),
     selectedColor: AppColors.ink,
@@ -303,7 +303,7 @@ class _PlayerAttendanceRow extends StatelessWidget {
                                 player.availability != PlayerAvailability.ready
                             ? AppColors.danger
                             : AppColors.muted,
-                        fontSize: 10,
+                        fontSize: 12,
                         fontWeight: player.note != null
                             ? FontWeight.w700
                             : FontWeight.w400,
@@ -330,7 +330,7 @@ class _PlayerAttendanceRow extends StatelessWidget {
                 child: Text(
                   response,
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -373,7 +373,7 @@ class _NoAttendanceResults extends StatelessWidget {
           SizedBox(height: 4),
           Text(
             '선수 상태가 변경되면 이곳에 표시됩니다.',
-            style: TextStyle(color: AppColors.muted, fontSize: 11),
+            style: TextStyle(color: AppColors.muted, fontSize: 12),
           ),
         ],
       ),

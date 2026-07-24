@@ -130,7 +130,7 @@ class _FeedbackTimeline extends StatelessWidget {
                           entry.$2.$1,
                           style: const TextStyle(
                             color: AppColors.muted,
-                            fontSize: 11,
+                            fontSize: 12,
                           ),
                         ),
                       ),
@@ -149,7 +149,7 @@ class _FeedbackTimeline extends StatelessWidget {
                               entry.$2.$3,
                               style: const TextStyle(
                                 color: AppColors.muted,
-                                fontSize: 11,
+                                fontSize: 12,
                                 height: 1.45,
                               ),
                             ),
@@ -200,7 +200,7 @@ class _CareerCard extends StatelessWidget {
               SizedBox(height: 4),
               Text(
                 '2026년 5월 2일 · 대전하나시티즌 U18전',
-                style: TextStyle(color: Colors.white60, fontSize: 11),
+                style: TextStyle(color: Colors.white60, fontSize: 12),
               ),
             ],
           ),

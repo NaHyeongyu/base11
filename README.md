@@ -1,6 +1,6 @@
 # BASE11
 
-한국 유소년 축구팀의 일정, 출석, 공지, 선수 상태와 피드백을 연결하는 디지털 클럽하우스입니다.
+엘리트 유소년 축구팀의 계획, 스태프 협업, 실행 데이터와 선수 목표를 연결하는 코칭 운영체제입니다.
 
 > 선수의 다음을 만드는 팀의 베이스
 
@@ -18,12 +18,15 @@
 ```bash
 cp .env.example .env
 make db-up
+make db-migrate
+make db-seed
+make db-seed-year
 make api-dev
 make web-dev
 make mobile-run
 ```
 
-각 명령은 별도 터미널에서 실행합니다. 전체 검증은 `make check`입니다.
+데이터베이스 준비 후 API와 프론트 명령은 별도 터미널에서 실행합니다. 전체 검증은 `make check`입니다. `make db-seed-year`는 FC 안양 U18의 2026년 선수단, 52주 계획, 훈련·경기, GPS 지표와 코칭 이력을 중복 없이 생성합니다.
 
 ## 버전 기준
 

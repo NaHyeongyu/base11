@@ -1,6 +1,7 @@
-import { attendanceRows } from "@/features/coach-data/mock-data";
-import { ActionButton, Badge, MetricCard, PageHeader, Panel, PlayerIdentity } from "@/features/coach-ui/components";
-import { Icon } from "@/features/coach-shell/icon";
+import { attendanceRows } from "@/features/coach-attendance/data/attendance-preview-data";
+import { PlayerIdentity } from "@/features/players/ui/player-identity";
+import { ActionButton, Badge, MetricCard, PageHeader, Panel } from "@/shared/ui/components";
+import { Icon } from "@/shared/ui/icon";
 
 function responseTone(value: string) { if (value === "참석") return "green" as const; if (value === "지각" || value === "일부 참여") return "orange" as const; if (value === "결석") return "red" as const; return "gray" as const; }
 

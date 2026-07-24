@@ -1,4 +1,3 @@
-import 'package:clubhaus_mobile/features/player/data/player_preview_data.dart';
 import 'package:clubhaus_mobile/features/player/domain/player_models.dart';
 import 'package:clubhaus_mobile/features/player/presentation/player_controller.dart';
 import 'package:clubhaus_mobile/features/player/presentation/player_growth_screen.dart';
@@ -9,7 +8,12 @@ import 'package:clubhaus_mobile/features/player/presentation/player_today_screen
 import 'package:flutter/material.dart';
 
 class PlayerShell extends StatefulWidget {
-  const PlayerShell({required this.onChangeRole, super.key});
+  const PlayerShell({
+    required this.snapshot,
+    required this.onChangeRole,
+    super.key,
+  });
+  final PlayerSnapshot snapshot;
   final VoidCallback onChangeRole;
 
   @override
@@ -37,14 +41,14 @@ class _PlayerShellState extends State<PlayerShell> {
             index: selectedIndex,
             children: [
               PlayerTodayScreen(
-                snapshot: PlayerPreviewData.snapshot,
+                snapshot: widget.snapshot,
                 controller: _controller,
               ),
-              const PlayerScheduleScreen(snapshot: PlayerPreviewData.snapshot),
+              PlayerScheduleScreen(snapshot: widget.snapshot),
               const PlayerGrowthScreen(),
               const PlayerTeamScreen(),
               PlayerProfileScreen(
-                snapshot: PlayerPreviewData.snapshot,
+                snapshot: widget.snapshot,
                 onChangeRole: widget.onChangeRole,
               ),
             ],

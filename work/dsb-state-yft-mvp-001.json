@@ -27,7 +27,8 @@
       "parent": "2:73",
       "interactions": "2:74",
       "data": "2:75",
-      "edgeCases": "2:76"
+      "edgeCases": "2:76",
+      "eliteCoachingCurrentSpec": "134:2"
     },
     "components": {
       "button": "6:12",
@@ -46,6 +47,7 @@
       "desktopDataRow": "39:29"
     },
     "frames": {
+      "eliteCoachingCurrentSpecRoot": "134:3",
       "coachDesktopRoot": "40:2",
       "coachDesktopKD01": "41:4",
       "coachDesktopKD02": "41:80",

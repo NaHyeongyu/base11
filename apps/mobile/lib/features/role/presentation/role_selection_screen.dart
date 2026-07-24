@@ -46,7 +46,7 @@ class RoleSelectionScreen extends StatelessWidget {
                       'ROLE PREVIEW',
                       style: TextStyle(
                         color: AppColors.muted,
-                        fontSize: 10,
+                        fontSize: 12,
                         letterSpacing: 1,
                       ),
                     ),
@@ -155,7 +155,7 @@ class _RoleCard extends StatelessWidget {
                     eyebrow,
                     style: const TextStyle(
                       color: Colors.white60,
-                      fontSize: 9,
+                      fontSize: 12,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.1,
                     ),
@@ -176,7 +176,7 @@ class _RoleCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       color: Colors.white70,
-                      fontSize: 11,
+                      fontSize: 12,
                       height: 1.4,
                     ),
                   ),

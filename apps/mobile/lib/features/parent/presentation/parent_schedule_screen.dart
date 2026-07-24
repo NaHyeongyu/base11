@@ -72,7 +72,7 @@ class _MonthSummary extends StatelessWidget {
               SizedBox(height: 5),
               Text(
                 '훈련 12 · 경기 4 · 휴식 6',
-                style: TextStyle(color: AppColors.muted, fontSize: 11),
+                style: TextStyle(color: AppColors.muted, fontSize: 12),
               ),
             ],
           ),
@@ -110,7 +110,7 @@ class _ParentEventCard extends StatelessWidget {
             const Spacer(),
             Text(
               event.date,
-              style: const TextStyle(color: AppColors.muted, fontSize: 10),
+              style: const TextStyle(color: AppColors.muted, fontSize: 12),
             ),
           ],
         ),
@@ -141,7 +141,7 @@ class _ParentEventCard extends StatelessWidget {
                     '${event.location} · ${event.meetTime}',
                     style: const TextStyle(
                       color: AppColors.muted,
-                      fontSize: 11,
+                      fontSize: 12,
                     ),
                   ),
                 ],
@@ -163,7 +163,7 @@ class _ParentEventCard extends StatelessWidget {
                 child: Text(
                   event.preparation!,
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -204,7 +204,7 @@ class _TransportCard extends StatelessWidget {
               SizedBox(height: 4),
               Text(
                 '12:10 안양종합운동장 출발 · 18:30 복귀 예정',
-                style: TextStyle(color: Colors.white60, fontSize: 10),
+                style: TextStyle(color: Colors.white60, fontSize: 12),
               ),
             ],
           ),

@@ -93,7 +93,7 @@ class _TeamIdentity extends StatelessWidget {
               SizedBox(height: 4),
               Text(
                 '2026 시즌 · K리그 주니어 U18',
-                style: TextStyle(color: Colors.white70, fontSize: 11),
+                style: TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ],
           ),
@@ -143,7 +143,7 @@ class _Teammates extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -151,7 +151,7 @@ class _Teammates extends StatelessWidget {
                       player.$3,
                       style: const TextStyle(
                         color: AppColors.muted,
-                        fontSize: 9,
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -229,7 +229,7 @@ class _FeedRow extends StatelessWidget {
               subtitle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: AppColors.muted, fontSize: 10),
+              style: const TextStyle(color: AppColors.muted, fontSize: 12),
             ),
           ],
         ),

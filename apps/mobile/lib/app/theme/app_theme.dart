@@ -13,7 +13,7 @@ abstract final class AppTheme {
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.canvas,
-      fontFamily: 'Apple SD Gothic Neo',
+      fontFamily: 'Noto Sans KR',
       textTheme: const TextTheme(
         headlineMedium: TextStyle(
           color: AppColors.ink,
@@ -40,7 +40,7 @@ abstract final class AppTheme {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
           side: BorderSide(color: AppColors.line),
         ),
       ),
@@ -50,7 +50,7 @@ abstract final class AppTheme {
           backgroundColor: AppColors.brand,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
           ),
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
         ),
@@ -61,7 +61,7 @@ abstract final class AppTheme {
           foregroundColor: AppColors.ink,
           side: const BorderSide(color: AppColors.line),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(13),
+            borderRadius: BorderRadius.circular(12),
           ),
           textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
         ),
@@ -82,15 +82,15 @@ abstract final class AppTheme {
           vertical: 15,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.line),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.line),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.brand, width: 1.5),
         ),
       ),
@@ -98,9 +98,9 @@ abstract final class AppTheme {
       navigationBarTheme: const NavigationBarThemeData(
         height: 74,
         backgroundColor: AppColors.surface,
-        indicatorColor: Color(0xFFEFF4FF),
+        indicatorColor: AppColors.brandSoft,
         labelTextStyle: WidgetStatePropertyAll(
-          TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
+          TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
         ),
       ),
     );

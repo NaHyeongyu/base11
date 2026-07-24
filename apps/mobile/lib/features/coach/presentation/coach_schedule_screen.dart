@@ -88,7 +88,7 @@ class CoachScheduleScreen extends StatelessWidget {
                               color: selected
                                   ? const Color(0xFFD0D5DD)
                                   : AppColors.muted,
-                              fontSize: 10,
+                              fontSize: 12,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -190,7 +190,7 @@ class _ScheduleCard extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   event.endTime,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 10),
+                  style: const TextStyle(color: AppColors.muted, fontSize: 12),
                 ),
               ],
             ),
@@ -226,7 +226,7 @@ class _ScheduleCard extends StatelessWidget {
                   '${event.location} · ${event.participants}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 10),
+                  style: const TextStyle(color: AppColors.muted, fontSize: 12),
                 ),
               ],
             ),
@@ -269,7 +269,7 @@ class _NextMatchCard extends StatelessWidget {
                 '7월 20일 일요일 · 15:00',
                 style: TextStyle(
                   color: Color(0xFFD0D5DD),
-                  fontSize: 10,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -335,7 +335,7 @@ class _NextMatchCard extends StatelessWidget {
                   '수원월드컵 보조구장 · 13:30 집합',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Color(0xFF98A2B3), fontSize: 10),
+                  style: TextStyle(color: Color(0xFF98A2B3), fontSize: 12),
                 ),
               ),
             ],

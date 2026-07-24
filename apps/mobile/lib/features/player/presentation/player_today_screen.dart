@@ -93,7 +93,7 @@ class _PlayerHeader extends StatelessWidget {
               '${snapshot.teamName} · No.${snapshot.number} ${snapshot.position}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: AppColors.muted, fontSize: 11),
+              style: const TextStyle(color: AppColors.muted, fontSize: 12),
             ),
           ],
         ),
@@ -142,7 +142,7 @@ class _SessionHero extends StatelessWidget {
               'TODAY · TRAINING',
               style: TextStyle(
                 color: Color(0xFF84ADFF),
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.1,
               ),
@@ -150,7 +150,7 @@ class _SessionHero extends StatelessWidget {
             Spacer(),
             Text(
               'D-DAY',
-              style: TextStyle(color: Colors.white70, fontSize: 10),
+              style: TextStyle(color: Colors.white70, fontSize: 12),
             ),
           ],
         ),
@@ -200,7 +200,7 @@ class _SessionHero extends StatelessWidget {
                 '${activity.location} · ${activity.note}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Color(0xFFD0D5DD), fontSize: 11),
+                style: const TextStyle(color: Color(0xFFD0D5DD), fontSize: 12),
               ),
             ),
           ],
@@ -246,7 +246,7 @@ class _CheckInCard extends StatelessWidget {
                   SizedBox(height: 4),
                   Text(
                     '코치에게 오늘 상태를 알려주세요.',
-                    style: TextStyle(color: AppColors.muted, fontSize: 11),
+                    style: TextStyle(color: AppColors.muted, fontSize: 12),
                   ),
                 ],
               ),
@@ -262,7 +262,7 @@ class _CheckInCard extends StatelessWidget {
         const SizedBox(height: 17),
         const Text(
           '참여 여부',
-          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 8),
         Wrap(
@@ -280,7 +280,7 @@ class _CheckInCard extends StatelessWidget {
         const SizedBox(height: 15),
         const Text(
           '몸 상태',
-          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 8),
         Wrap(

@@ -8,5 +8,5 @@ class ListTeams:
     def __init__(self, reader: TeamReader) -> None:
         self._reader = reader
 
-    def execute(self, organization_id: UUID) -> tuple[Team, ...]:
-        return self._reader.list_for_organization(organization_id)
+    def execute(self, user_id: UUID) -> tuple[Team, ...]:
+        return self._reader.list_for_user(user_id)

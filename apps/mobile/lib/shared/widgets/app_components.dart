@@ -27,7 +27,7 @@ class AppPageHeader extends StatelessWidget {
               eyebrow,
               style: const TextStyle(
                 color: AppColors.brand,
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1,
               ),
@@ -183,7 +183,7 @@ class AppRoundButton extends StatelessWidget {
                 '$badge',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 9,
+                  fontSize: 12,
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -219,7 +219,7 @@ class AppPill extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         color: foreground,
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: FontWeight.w900,
       ),
     ),
@@ -278,7 +278,7 @@ class AppMetric extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: AppColors.muted,
-              fontSize: 10,
+              fontSize: 12,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -340,7 +340,7 @@ class AppMenuRow extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       color: AppColors.muted,
-                      fontSize: 11,
+                      fontSize: 12,
                     ),
                   ),
                 ],

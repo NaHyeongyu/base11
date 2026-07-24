@@ -98,7 +98,7 @@ class _ChildHero extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 '${snapshot.teamName} · FW · 3학년',
-                style: const TextStyle(color: Colors.white70, fontSize: 11),
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
               ),
               const SizedBox(height: 7),
               const Row(
@@ -111,7 +111,7 @@ class _ChildHero extends StatelessWidget {
                   SizedBox(width: 5),
                   Text(
                     '팀 인증 선수',
-                    style: TextStyle(color: Color(0xFFB9E6FE), fontSize: 10),
+                    style: TextStyle(color: Color(0xFFB9E6FE), fontSize: 12),
                   ),
                 ],
               ),
@@ -152,7 +152,7 @@ class _ConditionCard extends StatelessWidget {
                   SizedBox(height: 4),
                   Text(
                     '오늘 08:12 선수가 직접 입력',
-                    style: TextStyle(color: AppColors.muted, fontSize: 10),
+                    style: TextStyle(color: AppColors.muted, fontSize: 12),
                   ),
                 ],
               ),
@@ -172,7 +172,7 @@ class _ConditionCard extends StatelessWidget {
             Expanded(
               child: Text(
                 '상세 통증 기록은 선수·지도자에게만 공개됩니다.',
-                style: TextStyle(color: AppColors.muted, fontSize: 10),
+                style: TextStyle(color: AppColors.muted, fontSize: 12),
               ),
             ),
           ],
@@ -242,7 +242,7 @@ class _RecordRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
     children: [
-      Text(label, style: const TextStyle(color: AppColors.muted, fontSize: 11)),
+      Text(label, style: const TextStyle(color: AppColors.muted, fontSize: 12)),
       const Spacer(),
       Text(value, style: const TextStyle(fontWeight: FontWeight.w900)),
     ],

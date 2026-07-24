@@ -3,19 +3,26 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Icon, type IconName } from "./icon";
+import { Icon, type IconName } from "@/shared/ui/icon";
 
-const navigation: Array<{ href: string; label: string; icon: IconName }> = [
-  { href: "/dashboard", label: "운영 대시보드", icon: "home" },
-  { href: "/schedule", label: "일정 관리", icon: "calendar" },
-  { href: "/notices", label: "공지 센터", icon: "notice" },
-  { href: "/attendance", label: "출석 현황", icon: "check" },
-  { href: "/wellbeing", label: "컨디션·부상", icon: "heart" },
-  { href: "/missions", label: "선수 미션", icon: "target" },
-  { href: "/feedback", label: "피드백", icon: "feedback" },
-  { href: "/matches", label: "경기 기록", icon: "match" },
-  { href: "/roster", label: "선수단", icon: "users" },
-  { href: "/team", label: "팀 정보", icon: "shield" },
+const navigation: Array<{ title: string; items: Array<{ href: string; label: string; icon: IconName; badge?: number }> }> = [
+  { title: "COACHING FLOW", items: [
+    { href: "/dashboard", label: "마이크로사이클", icon: "home" },
+    { href: "/schedule", label: "주간 계획", icon: "calendar" },
+    { href: "/staff-review", label: "스태프 검토", icon: "feedback", badge: 3 },
+  ] },
+  { title: "PLAYER & DATA", items: [
+    { href: "/missions", label: "선수 목표", icon: "target" },
+    { href: "/feedback", label: "회고·피드백", icon: "feedback", badge: 5 },
+    { href: "/wellbeing", label: "선수 이슈", icon: "heart" },
+    { href: "/performance", label: "퍼포먼스 데이터", icon: "download" },
+    { href: "/matches", label: "경기 기록", icon: "match" },
+  ] },
+  { title: "TEAM", items: [
+    { href: "/roster", label: "선수단", icon: "users" },
+    { href: "/notices", label: "역할별 게시", icon: "notice" },
+    { href: "/team", label: "팀·권한", icon: "shield" },
+  ] },
 ];
 
 export function CoachShell({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -38,15 +45,15 @@ export function CoachShell({ children }: Readonly<{ children: React.ReactNode }>
         </Link>
 
         <nav className="coach-nav" aria-label="지도자 메뉴">
-          <p>TEAM MANAGEMENT</p>
-          {navigation.map((item) => {
-            const active = pathname === item.href;
-            return (
-              <Link key={item.href} href={item.href} className={active ? "active" : ""} onClick={() => setOpen(false)}>
-                <Icon name={item.icon} /><span>{item.label}</span>{item.href === "/feedback" && <em>5</em>}
-              </Link>
-            );
-          })}
+          {navigation.map((group) => <div className="nav-group" key={group.title}>
+            <p>{group.title}</p>
+            {group.items.map((item) => {
+              const active = pathname === item.href;
+              return <Link key={item.href} href={item.href} className={active ? "active" : ""} onClick={() => setOpen(false)}>
+                <Icon name={item.icon} /><span>{item.label}</span>{item.badge && <em>{item.badge}</em>}
+              </Link>;
+            })}
+          </div>)}
         </nav>
 
         <div className="sidebar-profile">
@@ -62,7 +69,7 @@ export function CoachShell({ children }: Readonly<{ children: React.ReactNode }>
           <button className="mobile-menu" onClick={() => setOpen(true)} aria-label="메뉴 열기"><Icon name="menu" /></button>
           <label className="global-search">
             <Icon name="search" size={18} />
-            <input placeholder="선수, 일정, 공지를 검색하세요" aria-label="통합 검색" />
+            <input placeholder="선수, 세션, 목표, 데이터를 검색하세요" aria-label="통합 검색" />
             <kbd>⌘ K</kbd>
           </label>
           <div className="topbar-actions">

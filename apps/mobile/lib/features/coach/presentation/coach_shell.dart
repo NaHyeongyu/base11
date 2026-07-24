@@ -1,4 +1,3 @@
-import 'package:clubhaus_mobile/features/coach/data/coach_preview_data.dart';
 import 'package:clubhaus_mobile/features/coach/domain/coach_models.dart';
 import 'package:clubhaus_mobile/features/coach/presentation/coach_attendance_screen.dart';
 import 'package:clubhaus_mobile/features/coach/presentation/coach_controller.dart';
@@ -9,8 +8,13 @@ import 'package:clubhaus_mobile/features/coach/presentation/coach_schedule_scree
 import 'package:flutter/material.dart';
 
 class CoachShell extends StatefulWidget {
-  const CoachShell({required this.onChangeRole, super.key});
+  const CoachShell({
+    required this.snapshot,
+    required this.onChangeRole,
+    super.key,
+  });
 
+  final CoachTeamSnapshot snapshot;
   final VoidCallback onChangeRole;
 
   @override
@@ -39,20 +43,20 @@ class _CoachShellState extends State<CoachShell> {
               index: selectedIndex,
               children: [
                 CoachHomeScreen(
-                  snapshot: CoachPreviewData.snapshot,
+                  snapshot: widget.snapshot,
                   controller: _controller,
                 ),
-                const CoachScheduleScreen(snapshot: CoachPreviewData.snapshot),
+                CoachScheduleScreen(snapshot: widget.snapshot),
                 CoachAttendanceScreen(
-                  snapshot: CoachPreviewData.snapshot,
+                  snapshot: widget.snapshot,
                   controller: _controller,
                 ),
                 CoachRosterScreen(
-                  snapshot: CoachPreviewData.snapshot,
+                  snapshot: widget.snapshot,
                   controller: _controller,
                 ),
                 CoachManagementScreen(
-                  snapshot: CoachPreviewData.snapshot,
+                  snapshot: widget.snapshot,
                   onChangeRole: widget.onChangeRole,
                 ),
               ],

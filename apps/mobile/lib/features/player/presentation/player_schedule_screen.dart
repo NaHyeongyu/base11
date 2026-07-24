@@ -105,7 +105,7 @@ class _WeekStrip extends StatelessWidget {
                           color: entry.$2.$2 == '18'
                               ? Colors.white60
                               : AppColors.muted,
-                          fontSize: 10,
+                          fontSize: 12,
                         ),
                       ),
                       const SizedBox(height: 6),
@@ -150,7 +150,7 @@ class _ActivityCard extends StatelessWidget {
               ),
               Text(
                 activity.endTime,
-                style: const TextStyle(color: AppColors.muted, fontSize: 10),
+                style: const TextStyle(color: AppColors.muted, fontSize: 12),
               ),
             ],
           ),
@@ -177,14 +177,14 @@ class _ActivityCard extends StatelessWidget {
                 activity.location,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: AppColors.muted, fontSize: 11),
+                style: const TextStyle(color: AppColors.muted, fontSize: 12),
               ),
               if (activity.note != null)
                 Text(
                   activity.note!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.brand, fontSize: 10),
+                  style: const TextStyle(color: AppColors.brand, fontSize: 12),
                 ),
             ],
           ),
@@ -214,7 +214,7 @@ class _MatchCard extends StatelessWidget {
             Spacer(),
             Text(
               '7월 20일 일요일 · 15:00',
-              style: TextStyle(color: Colors.white70, fontSize: 11),
+              style: TextStyle(color: Colors.white70, fontSize: 12),
             ),
           ],
         ),
@@ -246,7 +246,7 @@ class _MatchCard extends StatelessWidget {
             Expanded(
               child: Text(
                 '수원월드컵 보조구장 · 13:30 집합',
-                style: TextStyle(color: Colors.white70, fontSize: 11),
+                style: TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ),
           ],
@@ -284,7 +284,7 @@ class _TeamMark extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: FontWeight.w800,
           ),
         ),

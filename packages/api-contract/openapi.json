@@ -33,15 +33,110 @@
         ],
         "summary": "List Teams",
         "operationId": "list_teams_api_v1_teams_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TeamResponse"
+                  },
+                  "type": "array",
+                  "title": "Response List Teams Api V1 Teams Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teams/{team_id}/dashboard": {
+      "get": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Get Dashboard",
+        "operationId": "get_dashboard_api_v1_teams__team_id__dashboard_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
-            "name": "organization_id",
-            "in": "query",
+            "name": "team_id",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid",
-              "title": "Organization Id"
+              "title": "Team Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teams/{team_id}/microcycles": {
+      "get": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "List Microcycles",
+        "operationId": "list_microcycles_api_v1_teams__team_id__microcycles_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 52,
+              "minimum": 1,
+              "default": 12,
+              "title": "Limit"
             }
           }
         ],
@@ -53,9 +148,694 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TeamResponse"
+                    "$ref": "#/components/schemas/MicrocycleResponse"
                   },
-                  "title": "Response List Teams Api V1 Teams Get"
+                  "title": "Response List Microcycles Api V1 Teams  Team Id  Microcycles Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Create Microcycle",
+        "operationId": "create_microcycle_api_v1_teams__team_id__microcycles_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MicrocycleCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MicrocycleResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}": {
+      "patch": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Update Session",
+        "operationId": "update_session_api_v1_sessions__session_id__patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/publish": {
+      "post": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Publish Session",
+        "operationId": "publish_session_api_v1_sessions__session_id__publish_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teams/{team_id}/staff-reviews": {
+      "get": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "List Staff Reviews",
+        "operationId": "list_staff_reviews_api_v1_teams__team_id__staff_reviews_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StaffReviewResponse"
+                  },
+                  "title": "Response List Staff Reviews Api V1 Teams  Team Id  Staff Reviews Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Create Staff Review",
+        "operationId": "create_staff_review_api_v1_teams__team_id__staff_reviews_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffReviewCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffReviewResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff-reviews/{review_id}/decision": {
+      "post": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Decide Staff Review",
+        "operationId": "decide_staff_review_api_v1_staff_reviews__review_id__decision_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Review Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffReviewDecision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffReviewResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teams/{team_id}/goals": {
+      "get": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "List Player Goals",
+        "operationId": "list_player_goals_api_v1_teams__team_id__goals_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlayerGoalResponse"
+                  },
+                  "title": "Response List Player Goals Api V1 Teams  Team Id  Goals Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Create Player Goal",
+        "operationId": "create_player_goal_api_v1_teams__team_id__goals_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlayerGoalCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerGoalResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teams/{team_id}/issues": {
+      "get": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "List Player Issues",
+        "operationId": "list_player_issues_api_v1_teams__team_id__issues_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": "open",
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlayerIssueResponse"
+                  },
+                  "title": "Response List Player Issues Api V1 Teams  Team Id  Issues Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Create Player Issue",
+        "operationId": "create_player_issue_api_v1_teams__team_id__issues_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlayerIssueCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerIssueResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teams/{team_id}/performance-imports": {
+      "get": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "List Performance Imports",
+        "operationId": "list_performance_imports_api_v1_teams__team_id__performance_imports_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PerformanceImportResponse"
+                  },
+                  "title": "Response List Performance Imports Api V1 Teams  Team Id  Performance Imports Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "coaching"
+        ],
+        "summary": "Create Performance Import",
+        "operationId": "create_performance_import_api_v1_teams__team_id__performance_imports_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerformanceImportCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PerformanceImportResponse"
                 }
               }
             }
@@ -76,6 +856,79 @@
   },
   "components": {
     "schemas": {
+      "DashboardCounts": {
+        "properties": {
+          "open_issues": {
+            "type": "integer",
+            "title": "Open Issues"
+          },
+          "open_reviews": {
+            "type": "integer",
+            "title": "Open Reviews"
+          },
+          "sessions_total": {
+            "type": "integer",
+            "title": "Sessions Total"
+          },
+          "sessions_with_data": {
+            "type": "integer",
+            "title": "Sessions With Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "open_issues",
+          "open_reviews",
+          "sessions_total",
+          "sessions_with_data"
+        ],
+        "title": "DashboardCounts"
+      },
+      "DashboardResponse": {
+        "properties": {
+          "team_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Team Id"
+          },
+          "microcycle": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MicrocycleResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "counts": {
+            "$ref": "#/components/schemas/DashboardCounts"
+          },
+          "recent_issues": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerIssueResponse"
+            },
+            "type": "array",
+            "title": "Recent Issues"
+          },
+          "recent_reviews": {
+            "items": {
+              "$ref": "#/components/schemas/StaffReviewResponse"
+            },
+            "type": "array",
+            "title": "Recent Reviews"
+          }
+        },
+        "type": "object",
+        "required": [
+          "team_id",
+          "microcycle",
+          "counts",
+          "recent_issues",
+          "recent_reviews"
+        ],
+        "title": "DashboardResponse"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -108,6 +961,1223 @@
         ],
         "title": "HealthResponse"
       },
+      "MatchResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "opponent": {
+            "type": "string",
+            "title": "Opponent"
+          },
+          "competition": {
+            "type": "string",
+            "title": "Competition"
+          },
+          "kickoff_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Kickoff At"
+          },
+          "venue": {
+            "type": "string",
+            "title": "Venue"
+          },
+          "home_away": {
+            "type": "string",
+            "title": "Home Away"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "opponent",
+          "competition",
+          "kickoff_at",
+          "venue",
+          "home_away",
+          "status"
+        ],
+        "title": "MatchResponse"
+      },
+      "MicrocycleCreate": {
+        "properties": {
+          "opponent": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Opponent"
+          },
+          "competition": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Competition"
+          },
+          "kickoff_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Kickoff At"
+          },
+          "venue": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Venue"
+          },
+          "home_away": {
+            "type": "string",
+            "pattern": "^(home|away|neutral)$",
+            "title": "Home Away",
+            "default": "home"
+          },
+          "week_start": {
+            "type": "string",
+            "format": "date",
+            "title": "Week Start"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "sessions": {
+            "items": {
+              "$ref": "#/components/schemas/SessionInput"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Sessions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "opponent",
+          "competition",
+          "kickoff_at",
+          "venue",
+          "week_start",
+          "title",
+          "sessions"
+        ],
+        "title": "MicrocycleCreate"
+      },
+      "MicrocycleResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "team_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Team Id"
+          },
+          "week_start": {
+            "type": "string",
+            "format": "date",
+            "title": "Week Start"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "published_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published At"
+          },
+          "match": {
+            "$ref": "#/components/schemas/MatchResponse"
+          },
+          "sessions": {
+            "items": {
+              "$ref": "#/components/schemas/SessionResponse"
+            },
+            "type": "array",
+            "title": "Sessions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "team_id",
+          "week_start",
+          "title",
+          "status",
+          "published_at",
+          "match",
+          "sessions"
+        ],
+        "title": "MicrocycleResponse"
+      },
+      "PerformanceImportCreate": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "source_vendor": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Source Vendor"
+          },
+          "original_filename": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Original Filename"
+          },
+          "object_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Object Key"
+          },
+          "column_mapping": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Column Mapping"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/PerformanceRowInput"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "title": "Rows"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "source_vendor",
+          "original_filename"
+        ],
+        "title": "PerformanceImportCreate"
+      },
+      "PerformanceImportResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "team_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Team Id"
+          },
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "source_vendor": {
+            "type": "string",
+            "title": "Source Vendor"
+          },
+          "original_filename": {
+            "type": "string",
+            "title": "Original Filename"
+          },
+          "object_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Object Key"
+          },
+          "column_mapping": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Column Mapping"
+          },
+          "row_count": {
+            "type": "integer",
+            "title": "Row Count"
+          },
+          "matched_count": {
+            "type": "integer",
+            "title": "Matched Count"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "team_id",
+          "session_id",
+          "source_vendor",
+          "original_filename",
+          "object_key",
+          "column_mapping",
+          "row_count",
+          "matched_count",
+          "status",
+          "created_at"
+        ],
+        "title": "PerformanceImportResponse"
+      },
+      "PerformanceRowInput": {
+        "properties": {
+          "player_membership_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Player Membership Id"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Metrics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "player_membership_id",
+          "metrics"
+        ],
+        "title": "PerformanceRowInput"
+      },
+      "PlayerGoalCreate": {
+        "properties": {
+          "player_membership_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Player Membership Id"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "baseline": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Baseline"
+          },
+          "target": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Target"
+          },
+          "metric_key": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Metric Key"
+          },
+          "review_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Review Date"
+          },
+          "visibility": {
+            "type": "string",
+            "pattern": "^(private|player|staff)$",
+            "title": "Visibility",
+            "default": "private"
+          }
+        },
+        "type": "object",
+        "required": [
+          "player_membership_id",
+          "title",
+          "baseline",
+          "target",
+          "metric_key",
+          "review_date"
+        ],
+        "title": "PlayerGoalCreate"
+      },
+      "PlayerGoalResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "team_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Team Id"
+          },
+          "player_membership_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Player Membership Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "baseline": {
+            "type": "string",
+            "title": "Baseline"
+          },
+          "target": {
+            "type": "string",
+            "title": "Target"
+          },
+          "metric_key": {
+            "type": "string",
+            "title": "Metric Key"
+          },
+          "progress_percent": {
+            "type": "integer",
+            "title": "Progress Percent"
+          },
+          "review_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Review Date"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "visibility": {
+            "type": "string",
+            "title": "Visibility"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "team_id",
+          "player_membership_id",
+          "title",
+          "baseline",
+          "target",
+          "metric_key",
+          "progress_percent",
+          "review_date",
+          "status",
+          "visibility",
+          "created_at"
+        ],
+        "title": "PlayerGoalResponse"
+      },
+      "PlayerIssueCreate": {
+        "properties": {
+          "player_membership_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Player Membership Id"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "issue_type": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1,
+            "title": "Issue Type"
+          },
+          "severity": {
+            "type": "string",
+            "pattern": "^(low|medium|high)$",
+            "title": "Severity"
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Detail"
+          },
+          "restriction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Restriction"
+          },
+          "owner_membership_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Membership Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "player_membership_id",
+          "issue_type",
+          "severity",
+          "detail"
+        ],
+        "title": "PlayerIssueCreate"
+      },
+      "PlayerIssueResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "team_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Team Id"
+          },
+          "player_membership_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Player Membership Id"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "issue_type": {
+            "type": "string",
+            "title": "Issue Type"
+          },
+          "severity": {
+            "type": "string",
+            "title": "Severity"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          },
+          "restriction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Restriction"
+          },
+          "owner_membership_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Membership Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "resolved_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved At"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "team_id",
+          "player_membership_id",
+          "session_id",
+          "issue_type",
+          "severity",
+          "detail",
+          "restriction",
+          "owner_membership_id",
+          "status",
+          "resolved_at",
+          "created_at"
+        ],
+        "title": "PlayerIssueResponse"
+      },
+      "PublicationResponse": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "session_status": {
+            "type": "string",
+            "title": "Session Status"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "audiences": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Audiences"
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Published At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "session_status",
+          "version",
+          "audiences",
+          "published_at"
+        ],
+        "title": "PublicationResponse"
+      },
+      "SessionBlockInput": {
+        "properties": {
+          "sort_order": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Sort Order"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "duration_minutes": {
+            "type": "integer",
+            "maximum": 240.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Duration Minutes"
+          },
+          "intensity": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 2,
+            "title": "Intensity"
+          },
+          "group_name": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Group Name"
+          },
+          "owner_membership_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Membership Id"
+          },
+          "coaching_points": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coaching Points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sort_order",
+          "title",
+          "duration_minutes",
+          "intensity",
+          "group_name"
+        ],
+        "title": "SessionBlockInput"
+      },
+      "SessionBlockResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "sort_order": {
+            "type": "integer",
+            "title": "Sort Order"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "duration_minutes": {
+            "type": "integer",
+            "title": "Duration Minutes"
+          },
+          "intensity": {
+            "type": "string",
+            "title": "Intensity"
+          },
+          "group_name": {
+            "type": "string",
+            "title": "Group Name"
+          },
+          "owner_membership_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Membership Id"
+          },
+          "coaching_points": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coaching Points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "sort_order",
+          "title",
+          "duration_minutes",
+          "intensity",
+          "group_name",
+          "owner_membership_id",
+          "coaching_points"
+        ],
+        "title": "SessionBlockResponse"
+      },
+      "SessionInput": {
+        "properties": {
+          "day_code": {
+            "type": "string",
+            "maxLength": 12,
+            "minLength": 2,
+            "title": "Day Code"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "objective": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Objective"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Scheduled At"
+          },
+          "duration_minutes": {
+            "type": "integer",
+            "maximum": 480.0,
+            "minimum": 0.0,
+            "title": "Duration Minutes"
+          },
+          "intensity": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 2,
+            "title": "Intensity"
+          },
+          "location": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Location"
+          },
+          "internal_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Notes"
+          },
+          "blocks": {
+            "items": {
+              "$ref": "#/components/schemas/SessionBlockInput"
+            },
+            "type": "array",
+            "title": "Blocks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "day_code",
+          "title",
+          "objective",
+          "scheduled_at",
+          "duration_minutes",
+          "intensity",
+          "location"
+        ],
+        "title": "SessionInput"
+      },
+      "SessionResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "day_code": {
+            "type": "string",
+            "title": "Day Code"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "objective": {
+            "type": "string",
+            "title": "Objective"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Scheduled At"
+          },
+          "duration_minutes": {
+            "type": "integer",
+            "title": "Duration Minutes"
+          },
+          "intensity": {
+            "type": "string",
+            "title": "Intensity"
+          },
+          "location": {
+            "type": "string",
+            "title": "Location"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "internal_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Notes"
+          },
+          "blocks": {
+            "items": {
+              "$ref": "#/components/schemas/SessionBlockResponse"
+            },
+            "type": "array",
+            "title": "Blocks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "day_code",
+          "title",
+          "objective",
+          "scheduled_at",
+          "duration_minutes",
+          "intensity",
+          "location",
+          "status",
+          "version",
+          "internal_notes",
+          "blocks"
+        ],
+        "title": "SessionResponse"
+      },
+      "SessionUpdate": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 160,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "objective": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Objective"
+          },
+          "scheduled_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scheduled At"
+          },
+          "duration_minutes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 480.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Minutes"
+          },
+          "intensity": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20,
+                "minLength": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intensity"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 180,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "internal_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Notes"
+          },
+          "blocks": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SessionBlockInput"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blocks"
+          },
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "expected_version"
+        ],
+        "title": "SessionUpdate"
+      },
+      "StaffReviewCreate": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Message"
+          },
+          "proposed_changes": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Proposed Changes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "message"
+        ],
+        "title": "StaffReviewCreate"
+      },
+      "StaffReviewDecision": {
+        "properties": {
+          "decision": {
+            "type": "string",
+            "pattern": "^(accepted|kept|rejected)$",
+            "title": "Decision"
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "decision",
+          "note"
+        ],
+        "title": "StaffReviewDecision"
+      },
+      "StaffReviewResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "team_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Team Id"
+          },
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "author_membership_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Author Membership Id"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "proposed_changes": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Proposed Changes"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision"
+          },
+          "decision_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision Note"
+          },
+          "decided_by_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided By Id"
+          },
+          "decided_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided At"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "team_id",
+          "session_id",
+          "author_membership_id",
+          "message",
+          "proposed_changes",
+          "status",
+          "decision",
+          "decision_note",
+          "decided_by_id",
+          "decided_at",
+          "created_at"
+        ],
+        "title": "StaffReviewResponse"
+      },
       "TeamResponse": {
         "properties": {
           "id": {
@@ -131,6 +2201,14 @@
           "season": {
             "type": "integer",
             "title": "Season"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
           }
         },
         "type": "object",
@@ -139,7 +2217,9 @@
           "organization_id",
           "name",
           "age_group",
-          "season"
+          "season",
+          "timezone",
+          "status"
         ],
         "title": "TeamResponse"
       },
@@ -182,6 +2262,12 @@
           "type"
         ],
         "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
       }
     }
   }
