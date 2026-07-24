@@ -121,7 +121,7 @@ class _HomeHeader extends StatelessWidget {
                 '${snapshot.season} · ${snapshot.coachName}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: AppColors.muted, fontSize: 11),
+                style: const TextStyle(color: AppColors.muted, fontSize: 12),
               ),
             ],
           ),
@@ -180,7 +180,7 @@ class _TodayHero extends StatelessWidget {
                 'TODAY · NEXT SESSION',
                 style: TextStyle(
                   color: Color(0xFF84ADFF),
-                  fontSize: 10,
+                  fontSize: 12,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.1,
                 ),
@@ -190,7 +190,7 @@ class _TodayHero extends StatelessWidget {
                 'D-DAY',
                 style: TextStyle(
                   color: Colors.white70,
-                  fontSize: 10,
+                  fontSize: 12,
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -365,7 +365,7 @@ class _QuickActions extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 10,
+                        fontSize: 12,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -467,7 +467,7 @@ class _AttentionRow extends StatelessWidget {
                   detail,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 10),
+                  style: const TextStyle(color: AppColors.muted, fontSize: 12),
                 ),
               ],
             ),
@@ -510,7 +510,7 @@ class _Timeline extends StatelessWidget {
                     event.time,
                     style: TextStyle(
                       color: active ? AppColors.brand : AppColors.muted,
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -576,7 +576,7 @@ class _Timeline extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           color: AppColors.muted,
-                          fontSize: 10,
+                          fontSize: 12,
                         ),
                       ),
                     ],

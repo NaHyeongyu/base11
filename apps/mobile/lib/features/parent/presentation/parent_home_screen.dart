@@ -69,7 +69,7 @@ class _ParentHeader extends StatelessWidget {
               'PARENT HOME',
               style: TextStyle(
                 color: AppColors.warning,
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.1,
               ),
@@ -124,7 +124,7 @@ class _ChildSelector extends StatelessWidget {
               const SizedBox(height: 3),
               Text(
                 '${snapshot.teamName} · FW · 3학년',
-                style: const TextStyle(color: AppColors.muted, fontSize: 11),
+                style: const TextStyle(color: AppColors.muted, fontSize: 12),
               ),
             ],
           ),
@@ -169,7 +169,7 @@ class _NextEventHero extends StatelessWidget {
           'TODAY · NEXT SCHEDULE',
           style: TextStyle(
             color: Color(0xFFFEC84B),
-            fontSize: 10,
+            fontSize: 12,
             fontWeight: FontWeight.w900,
             letterSpacing: 1.1,
           ),
@@ -218,7 +218,7 @@ class _NextEventHero extends StatelessWidget {
             Expanded(
               child: Text(
                 event.location,
-                style: const TextStyle(color: Colors.white70, fontSize: 11),
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ),
           ],
@@ -261,7 +261,7 @@ class _PreparationCard extends StatelessWidget {
               SizedBox(height: 4),
               Text(
                 '검정 훈련복 · 축구화 · 개인 물병',
-                style: TextStyle(color: AppColors.muted, fontSize: 11),
+                style: TextStyle(color: AppColors.muted, fontSize: 12),
               ),
             ],
           ),
@@ -323,7 +323,7 @@ class _NoticePreview extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   color: AppColors.muted,
-                                  fontSize: 10,
+                                  fontSize: 12,
                                 ),
                               ),
                             ],

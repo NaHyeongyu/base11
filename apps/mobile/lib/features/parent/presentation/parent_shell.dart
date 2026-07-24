@@ -1,4 +1,3 @@
-import 'package:clubhaus_mobile/features/parent/data/parent_preview_data.dart';
 import 'package:clubhaus_mobile/features/parent/domain/parent_models.dart';
 import 'package:clubhaus_mobile/features/parent/presentation/parent_child_screen.dart';
 import 'package:clubhaus_mobile/features/parent/presentation/parent_controller.dart';
@@ -9,7 +8,12 @@ import 'package:clubhaus_mobile/features/parent/presentation/parent_schedule_scr
 import 'package:flutter/material.dart';
 
 class ParentShell extends StatefulWidget {
-  const ParentShell({required this.onChangeRole, super.key});
+  const ParentShell({
+    required this.snapshot,
+    required this.onChangeRole,
+    super.key,
+  });
+  final ParentSnapshot snapshot;
   final VoidCallback onChangeRole;
 
   @override
@@ -37,17 +41,17 @@ class _ParentShellState extends State<ParentShell> {
             index: selectedIndex,
             children: [
               ParentHomeScreen(
-                snapshot: ParentPreviewData.snapshot,
+                snapshot: widget.snapshot,
                 controller: _controller,
               ),
-              const ParentScheduleScreen(snapshot: ParentPreviewData.snapshot),
+              ParentScheduleScreen(snapshot: widget.snapshot),
               ParentNoticesScreen(
-                snapshot: ParentPreviewData.snapshot,
+                snapshot: widget.snapshot,
                 controller: _controller,
               ),
-              const ParentChildScreen(snapshot: ParentPreviewData.snapshot),
+              ParentChildScreen(snapshot: widget.snapshot),
               ParentMoreScreen(
-                snapshot: ParentPreviewData.snapshot,
+                snapshot: widget.snapshot,
                 onChangeRole: widget.onChangeRole,
               ),
             ],

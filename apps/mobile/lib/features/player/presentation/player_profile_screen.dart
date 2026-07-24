@@ -113,7 +113,7 @@ class _ProfileHero extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 'No.${snapshot.number} · ${snapshot.position} · ${snapshot.grade}',
-                style: const TextStyle(color: Colors.white70, fontSize: 11),
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
               ),
               const SizedBox(height: 7),
               const Row(
@@ -128,7 +128,7 @@ class _ProfileHero extends StatelessWidget {
                     '팀 인증 프로필',
                     style: TextStyle(
                       color: Color(0xFFB9E6FE),
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -170,7 +170,7 @@ class _InfoRow extends StatelessWidget {
         width: 70,
         child: Text(
           label,
-          style: const TextStyle(color: AppColors.muted, fontSize: 11),
+          style: const TextStyle(color: AppColors.muted, fontSize: 12),
         ),
       ),
       Expanded(

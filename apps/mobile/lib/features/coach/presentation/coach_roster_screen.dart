@@ -149,7 +149,7 @@ class _PlayerCard extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text(
                   'No.${player.number} · ${player.position} · ${player.grade}',
-                  style: const TextStyle(color: AppColors.muted, fontSize: 11),
+                  style: const TextStyle(color: AppColors.muted, fontSize: 12),
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -220,12 +220,12 @@ class _InlineStat extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(color: AppColors.muted, fontSize: 9),
+            style: const TextStyle(color: AppColors.muted, fontSize: 12),
           ),
           const Spacer(),
           Text(
             value,
-            style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
           ),
         ],
       ),
@@ -257,7 +257,7 @@ class _EmptyRoster extends StatelessWidget {
           SizedBox(height: 4),
           Text(
             '이름이나 번호를 다시 확인해주세요.',
-            style: TextStyle(color: AppColors.muted, fontSize: 11),
+            style: TextStyle(color: AppColors.muted, fontSize: 12),
           ),
         ],
       ),

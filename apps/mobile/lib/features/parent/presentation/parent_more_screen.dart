@@ -127,7 +127,7 @@ class _AccountCard extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 '${snapshot.childName} 선수 보호자 · 인증 완료',
-                style: const TextStyle(color: Colors.white70, fontSize: 11),
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ],
           ),

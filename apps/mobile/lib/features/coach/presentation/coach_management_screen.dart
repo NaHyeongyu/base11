@@ -45,7 +45,7 @@ class CoachManagementScreen extends StatelessWidget {
                   onPressed: () {},
                   child: const Text(
                     'BASE11 Coach · v0.1.0',
-                    style: TextStyle(color: AppColors.muted, fontSize: 10),
+                    style: TextStyle(color: AppColors.muted, fontSize: 12),
                   ),
                 ),
               ),
@@ -114,7 +114,7 @@ class _TeamProfile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Color(0xFF98A2B3),
-                        fontSize: 11,
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -318,7 +318,7 @@ class _MenuRow extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: AppColors.muted,
-                        fontSize: 10,
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -338,7 +338,7 @@ class _MenuRow extends StatelessWidget {
                     badge!,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: FontWeight.w900,
                     ),
                   ),

@@ -115,7 +115,7 @@ class _NoticeCard extends StatelessWidget {
                         notice.time,
                         style: const TextStyle(
                           color: AppColors.muted,
-                          fontSize: 9,
+                          fontSize: 12,
                         ),
                       ),
                     ],
@@ -132,7 +132,7 @@ class _NoticeCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       color: AppColors.muted,
-                      fontSize: 11,
+                      fontSize: 12,
                       height: 1.45,
                     ),
                   ),

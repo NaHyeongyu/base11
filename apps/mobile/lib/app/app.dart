@@ -1,6 +1,9 @@
 import 'package:clubhaus_mobile/app/theme/app_theme.dart';
+import 'package:clubhaus_mobile/features/coach/data/coach_preview_data.dart';
 import 'package:clubhaus_mobile/features/coach/presentation/coach_shell.dart';
+import 'package:clubhaus_mobile/features/parent/data/parent_preview_data.dart';
 import 'package:clubhaus_mobile/features/parent/presentation/parent_shell.dart';
+import 'package:clubhaus_mobile/features/player/data/player_preview_data.dart';
 import 'package:clubhaus_mobile/features/player/presentation/player_shell.dart';
 import 'package:clubhaus_mobile/features/role/domain/app_role.dart';
 import 'package:clubhaus_mobile/features/role/presentation/role_selection_screen.dart';
@@ -35,9 +38,18 @@ class _RoleGateState extends State<_RoleGate> {
 
   @override
   Widget build(BuildContext context) => switch (_role) {
-    AppRole.coach => CoachShell(onChangeRole: _clearRole),
-    AppRole.player => PlayerShell(onChangeRole: _clearRole),
-    AppRole.parent => ParentShell(onChangeRole: _clearRole),
+    AppRole.coach => CoachShell(
+      snapshot: CoachPreviewData.snapshot,
+      onChangeRole: _clearRole,
+    ),
+    AppRole.player => PlayerShell(
+      snapshot: PlayerPreviewData.snapshot,
+      onChangeRole: _clearRole,
+    ),
+    AppRole.parent => ParentShell(
+      snapshot: ParentPreviewData.snapshot,
+      onChangeRole: _clearRole,
+    ),
     null => RoleSelectionScreen(onSelected: _selectRole),
   };
 }

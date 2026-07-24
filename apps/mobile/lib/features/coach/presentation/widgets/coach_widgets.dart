@@ -29,7 +29,7 @@ class CoachPageHeader extends StatelessWidget {
                 eyebrow,
                 style: const TextStyle(
                   color: AppColors.brand,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1,
                 ),
@@ -194,7 +194,7 @@ class CoachIconButton extends StatelessWidget {
                   '$badge',
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 9,
+                    fontSize: 12,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -237,7 +237,7 @@ class StatusPill extends StatelessWidget {
         label,
         style: TextStyle(
           color: foreground,
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: FontWeight.w800,
         ),
       ),
@@ -332,7 +332,7 @@ class MiniMetric extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: AppColors.muted,
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: FontWeight.w700,
               ),
             ),
