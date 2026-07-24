@@ -1,6 +1,6 @@
-import { matches } from "@/features/coach-data/mock-data";
-import { ActionButton, Badge, MetricCard, PageHeader, Panel } from "@/features/coach-ui/components";
-import { Icon } from "@/features/coach-shell/icon";
+import { matches } from "@/features/coach-matches/data/matches-preview-data";
+import { ActionButton, Badge, MetricCard, PageHeader, Panel } from "@/shared/ui/components";
+import { Icon } from "@/shared/ui/icon";
 
 export function MatchesView() {
   return <>

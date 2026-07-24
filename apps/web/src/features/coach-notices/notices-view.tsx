@@ -1,6 +1,6 @@
-import { notices } from "@/features/coach-data/mock-data";
-import { ActionButton, Badge, MetricCard, PageHeader, Panel, ProgressBar } from "@/features/coach-ui/components";
-import { Icon } from "@/features/coach-shell/icon";
+import { notices } from "@/features/coach-notices/data/notices-preview-data";
+import { ActionButton, Badge, MetricCard, PageHeader, Panel, ProgressBar } from "@/shared/ui/components";
+import { Icon } from "@/shared/ui/icon";
 
 export function NoticesView() {
   return <>

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { matches, players } from "@/features/coach-data/mock-data";
-import { Icon } from "@/features/coach-shell/icon";
-import { ActionButton, Badge, MetricCard, Panel, PlayerIdentity, ProgressBar } from "@/features/coach-ui/components";
+import { matches } from "@/features/coach-matches/data/matches-preview-data";
+import { players } from "@/features/players/data/player-preview-data";
+import { PlayerIdentity } from "@/features/players/ui/player-identity";
+import { ActionButton, Badge, MetricCard, Panel, ProgressBar } from "@/shared/ui/components";
+import { Icon } from "@/shared/ui/icon";
 
 type TeamTab = "overview" | "roster" | "staff" | "records" | "settings";
 
@@ -49,7 +51,7 @@ function TeamHero() {
       <div><small>등록 선수</small><strong>26</strong><span>정원 30명</span></div>
       <div><small>코칭스태프</small><strong>5</strong><span>권한 활성 5명</span></div>
       <div><small>시즌 전적</small><strong>8승 2무 2패</strong><span>승률 67%</span></div>
-      <div><small>최근 출석률</small><strong>93%</strong><span className="positive">전월 대비 +2.4%</span></div>
+      <div><small>세션 데이터 연결</small><strong>86%</strong><span className="positive">최근 30일 +8%p</span></div>
     </div>
   </section>;
 }
@@ -67,8 +69,8 @@ function OverviewTab() {
         </div>
         <div className="goal-list">
           <div><Icon name="check" size={17} /><span><strong>경기당 실점 1.0 이하</strong><small>현재 1.08 · 목표 근접</small></span><Badge tone="orange">진행 중</Badge></div>
-          <div><Icon name="check" size={17} /><span><strong>선수 평균 출석률 92%</strong><small>현재 93% · 기준 달성</small></span><Badge tone="green">달성</Badge></div>
-          <div><Icon name="target" size={17} /><span><strong>개인 미션 주간 완료율 80%</strong><small>현재 74% · 6%p 필요</small></span><Badge tone="blue">진행 중</Badge></div>
+          <div><Icon name="check" size={17} /><span><strong>세션 데이터 연결률 90%</strong><small>현재 86% · 최근 30일</small></span><Badge tone="orange">진행 중</Badge></div>
+          <div><Icon name="target" size={17} /><span><strong>개인 목표 근거 연결률 85%</strong><small>현재 81% · 4%p 필요</small></span><Badge tone="blue">진행 중</Badge></div>
         </div>
       </Panel>
     </div>
@@ -91,10 +93,10 @@ function OverviewTab() {
 }
 
 function RosterTab() {
-  return <Panel title="등록 선수 26명" description="선수의 소속 정보와 오늘 상태를 함께 확인합니다." action={<div className="table-tools"><label><Icon name="search" size={16} /><input aria-label="선수 검색" placeholder="이름, 번호, 포지션 검색" /></label><button><Icon name="filter" size={16} />전체 학년</button></div>}>
+  return <Panel title="등록 선수 26명" description="선수의 소속 정보, 목표 진척과 최근 세션 부하를 함께 확인합니다." action={<div className="table-tools"><label><Icon name="search" size={16} /><input aria-label="선수 검색" placeholder="이름, 번호, 포지션 검색" /></label><button><Icon name="filter" size={16} />전체 학년</button></div>}>
     <div className="team-roster-table">
-      <div className="team-roster-head"><span>선수</span><span>학년</span><span>주발</span><span>출석률</span><span>오늘 준비도</span><span>상태</span><span /></div>
-      {players.map((player) => <div className="team-roster-row" key={player.id}><PlayerIdentity player={player} /><span>{player.grade}</span><span>{player.dominantFoot}</span><div className="inline-progress"><ProgressBar value={player.attendance} tone="green" /><strong>{player.attendance}%</strong></div><div className="inline-progress"><ProgressBar value={player.condition} tone={player.condition < 60 ? "orange" : "blue"} /><strong>{player.condition}</strong></div><Badge tone={player.status === "정상" ? "green" : player.status === "부상" ? "red" : "orange"}>{player.status}</Badge><button className="more-button" aria-label={`${player.name} 메뉴`}><Icon name="more" /></button></div>)}
+      <div className="team-roster-head"><span>선수</span><span>학년</span><span>주발</span><span>목표 진척</span><span>세션 부하</span><span>상태</span><span /></div>
+      {players.map((player) => <div className="team-roster-row" key={player.id}><PlayerIdentity player={player} /><span>{player.grade}</span><span>{player.dominantFoot}</span><div className="inline-progress"><ProgressBar value={player.goalProgress} tone="green" /><strong>{player.goalProgress}%</strong></div><div className="inline-progress"><ProgressBar value={player.sessionLoad} tone={player.sessionLoad > 85 ? "orange" : "blue"} /><strong>{player.sessionLoad}</strong></div><Badge tone={player.status === "정상" ? "green" : player.status === "부상" ? "red" : "orange"}>{player.status}</Badge><button className="more-button" aria-label={`${player.name} 메뉴`}><Icon name="more" /></button></div>)}
     </div>
   </Panel>;
 }
@@ -104,7 +106,7 @@ function StaffTab() {
     <div className="team-section-header"><div><h2>코칭스태프</h2><p>지도자 권한과 담당 영역을 관리합니다.</p></div><ActionButton>스태프 초대</ActionButton></div>
     <div className="staff-card-grid">{staff.map((member, index) => <article key={member.name} className="staff-card"><header><span>{member.initial}</span><Badge tone={index === 0 ? "blue" : index === 3 ? "purple" : "gray"}>{member.status}</Badge><button className="more-button" aria-label={`${member.name} 메뉴`}><Icon name="more" /></button></header><h3>{member.name}</h3><p>{member.role}</p><dl><div><dt>담당</dt><dd>{member.specialty}</dd></div><div><dt>연락처</dt><dd>{member.contact}</dd></div></dl><button className="staff-detail-button">권한 및 프로필 보기 <Icon name="chevron" size={15} /></button></article>)}</div>
     <Panel title="권한 안내" description="민감한 선수 정보는 역할별로 최소한만 노출합니다.">
-      <div className="permission-grid"><div><Badge tone="blue">관리자</Badge><strong>팀 전체 관리</strong><p>구성원, 일정, 공지, 건강 정보, 권한 설정</p></div><div><Badge tone="gray">지도자</Badge><strong>훈련 및 선수 관리</strong><p>일정, 출석, 미션, 피드백, 경기 기록</p></div><div><Badge tone="purple">메디컬</Badge><strong>건강 정보 관리</strong><p>선수 컨디션, 통증, 부상 및 복귀 상태</p></div></div>
+      <div className="permission-grid"><div><Badge tone="blue">감독</Badge><strong>최종 계획·승인</strong><p>마이크로사이클, 공개 범위, 역할, 최종 의사결정</p></div><div><Badge tone="gray">코칭스태프</Badge><strong>담당 세션·선수 검토</strong><p>세션 제안, 내부 메모, 목표, 피드백, 경기 기록</p></div><div><Badge tone="purple">메디컬</Badge><strong>건강 정보 관리</strong><p>선수 통증, 부상, 참여 제한 및 복귀 상태</p></div></div>
     </Panel>
   </>;
 }

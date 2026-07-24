@@ -1,33 +1,28 @@
-import { attendanceRows, players } from "@/features/coach-data/mock-data";
-import { Badge, MetricCard, PageHeader, Panel, PlayerIdentity, ProgressBar } from "@/features/coach-ui/components";
+import { playerIssues } from "@/features/coach-wellbeing/data/wellbeing-preview-data";
+import { players } from "@/features/players/data/player-preview-data";
+import { PlayerIdentity } from "@/features/players/ui/player-identity";
+import { Badge, MetricCard, PageHeader, Panel, ProgressBar } from "@/shared/ui/components";
 
 export function WellbeingView() {
-  const risks = players.filter((player) => player.status !== "정상");
   return <>
-    <PageHeader eyebrow="PLAYER WELLBEING" title="컨디션·부상" description="민감한 선수 상태는 지도자 권한이 있는 구성원만 확인할 수 있습니다." />
+    <PageHeader eyebrow="EXCEPTION-BASED PLAYER CARE" title="선수 이슈" description="정상 상태의 반복 입력은 요구하지 않고, 통증·복귀·참여 제한처럼 지도자의 결정이 필요한 예외만 관리합니다." />
     <div className="metric-grid four compact">
-      <MetricCard label="체크 완료" value="22 / 26" helper="오늘 17:40 기준" tone="blue" />
-      <MetricCard label="팀 준비도" value="78점" helper="최근 7일 평균" tone="green" />
-      <MetricCard label="관찰 필요" value="2명" helper="통증·피로 기준" tone="orange" />
-      <MetricCard label="부상 관리" value="1명" helper="복귀 프로그램 진행" tone="red" />
+      <MetricCard label="열린 이슈" value="3건" helper="통증 1 · 복귀 1 · 목표 1" tone="orange" />
+      <MetricCard label="훈련 제한" value="1명" helper="MD-2 세션에 반영" tone="red" />
+      <MetricCard label="복귀 관리" value="1명" helper="피치 복귀 승인 대기" tone="purple" />
+      <MetricCard label="담당 지정" value="100%" helper="미지정 이슈 없음" tone="green" />
     </div>
     <div className="content-grid wellbeing-grid">
-      <Panel title="오늘의 팀 준비도" description="체크인 응답 기준">
-        <div className="readiness-hero"><div className="score-ring"><strong>78</strong><small>GOOD</small></div><div className="readiness-copy"><Badge tone="green">훈련 진행 적합</Badge><h3>전반적으로 안정적인 상태입니다.</h3><p>피로도가 높은 2명의 훈련 강도를 개별 조정하세요.</p></div></div>
-        <div className="readiness-bars expanded">
-          <div><span>수면 회복</span><ProgressBar value={82} tone="blue" /><strong>82</strong></div>
-          <div><span>근육 피로</span><ProgressBar value={71} tone="orange" /><strong>71</strong></div>
-          <div><span>기분·의욕</span><ProgressBar value={85} tone="green" /><strong>85</strong></div>
-          <div><span>통증 위험</span><ProgressBar value={18} tone="red" /><strong>18</strong></div>
-        </div>
+      <Panel title="결정이 필요한 이슈" description="세션 계획에 영향을 주는 항목만 표시합니다." action={<Badge tone="orange">{playerIssues.length}건</Badge>}>
+        <div className="risk-list">{playerIssues.map((item) => <div key={item.player.id}><PlayerIdentity player={item.player} compact /><div><Badge tone={item.tone}>{item.type}</Badge><strong>{item.detail}</strong><small>{item.action} · 담당 {item.owner}</small></div><button>결정</button></div>)}</div>
       </Panel>
-      <Panel title="관찰 선수" description="훈련 전에 직접 확인해주세요." action={<Badge tone="orange">{risks.length}명</Badge>}>
-        <div className="risk-list">{risks.map((player) => { const row = attendanceRows.find((item) => item.player.id === player.id); return <div key={player.id}><PlayerIdentity player={player} compact /><div><Badge tone={player.status === "부상" ? "red" : "orange"}>{player.status}</Badge><strong>{row?.pain}</strong><small>준비도 {player.condition}점</small></div><button>상세</button></div>; })}</div>
+      <Panel title="MD-2 적용 상태" description="선수 이슈가 오늘 세션에 반영된 결과입니다.">
+        <div className="session-readiness"><div><span>제한 훈련 그룹</span><Badge tone="orange">1명</Badge></div><div><span>메디컬 확인</span><Badge tone="green">완료</Badge></div><div><span>세션 담당 공유</span><Badge tone="green">완료</Badge></div><div><span>보호자 공개</span><Badge tone="gray">필요 정보만</Badge></div></div>
       </Panel>
     </div>
-    <Panel title="최근 상태 보고" description="선수별 변화와 지도자 조치 기록입니다.">
-      <div className="data-table wellbeing-table"><div className="table-head"><span>선수</span><span>보고 시각</span><span>준비도</span><span>통증</span><span>지도자 조치</span></div>
-        {attendanceRows.slice(0, 6).map((row, index) => <div className="table-row" key={row.player.id}><PlayerIdentity player={row.player} compact /><span className="table-muted">오늘 {17 + Math.floor(index / 3)}:{22 + index * 3}</span><span><strong>{row.player.condition}</strong> / 100</span><span className={row.pain !== "없음" ? "pain-text" : "table-muted"}>{row.pain}</span><span>{row.pain !== "없음" ? "훈련 강도 조정" : "정상 참여"}</span></div>)}
+    <Panel title="선수별 최근 부하" description="GPS 데이터와 지도자 조치 기록을 함께 봅니다.">
+      <div className="data-table wellbeing-table"><div className="table-head"><span>선수</span><span>최근 세션</span><span>세션 부하</span><span>상태</span><span>지도자 조치</span></div>
+        {players.slice(0, 6).map((player) => <div className="table-row" key={player.id}><PlayerIdentity player={player} compact /><span className="table-muted">MD-4 연습 경기</span><div className="inline-progress"><ProgressBar value={player.sessionLoad} tone={player.sessionLoad > 85 ? "orange" : "blue"} /><strong>{player.sessionLoad}</strong></div><Badge tone={player.status === "정상" ? "green" : player.status === "부상" ? "red" : "orange"}>{player.status}</Badge><span>{player.status === "정상" ? "추가 조치 없음" : "MD-2 강도 조정"}</span></div>)}
       </div>
     </Panel>
   </>;

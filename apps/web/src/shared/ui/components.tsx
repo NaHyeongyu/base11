@@ -1,5 +1,5 @@
-import { Icon, type IconName } from "@/features/coach-shell/icon";
-import type { Player, Tone } from "@/features/coach-data/mock-data";
+import { Icon, type IconName } from "@/shared/ui/icon";
+import type { Tone } from "@/shared/model/tone";
 
 export function PageHeader({ eyebrow, title, description, action }: { eyebrow: string; title: string; description: string; action?: React.ReactNode }) {
   return <header className="page-header"><div><p className="page-eyebrow">{eyebrow}</p><h1>{title}</h1><p className="page-description">{description}</p></div>{action && <div className="page-actions">{action}</div>}</header>;
@@ -19,10 +19,6 @@ export function Panel({ title, description, action, children, className = "" }: 
 
 export function Badge({ children, tone = "gray" }: { children: React.ReactNode; tone?: Tone }) {
   return <span className={`status-badge tone-${tone}`}>{children}</span>;
-}
-
-export function PlayerIdentity({ player, compact = false }: { player: Player; compact?: boolean }) {
-  return <div className="player-identity"><span className={`avatar position-${player.position.toLowerCase()}`}>{player.number}</span><span><strong>{player.name}</strong><small>{compact ? `${player.position} · ${player.grade}` : `No.${player.number} · ${player.position} · ${player.grade}`}</small></span></div>;
 }
 
 export function ProgressBar({ value, tone = "blue" }: { value: number; tone?: Tone }) {
