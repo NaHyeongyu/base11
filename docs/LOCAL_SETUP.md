@@ -36,8 +36,14 @@ iPhone 실기기는 잠금 해제, 개발자 모드, Mac 신뢰 설정이 필요
 
 ```bash
 make db-up
+make db-migrate
+make db-seed
+make db-seed-year
 make api-dev
 make web-dev
 make mobile-run
 ```
 
+PostgreSQL은 다른 로컬 프로젝트와 충돌하지 않도록 호스트 `55432` 포트를 사용합니다. API 문서는 개발 환경에서 `http://localhost:8000/docs`로 확인할 수 있습니다.
+
+화면과 성과 추세를 긴 기간으로 검증하려면 `make db-seed-year`를 실행합니다. 2026년 1월 첫 주부터 이어지는 52주 데이터가 결정적 UUID로 생성되므로 같은 명령을 다시 실행해도 중복되지 않습니다.

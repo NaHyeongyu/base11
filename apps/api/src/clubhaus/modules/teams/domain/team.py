@@ -9,3 +9,5 @@ class Team:
     name: str
     age_group: str
     season: int
+    timezone: str
+    status: str
