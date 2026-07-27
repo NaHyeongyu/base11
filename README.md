@@ -39,6 +39,8 @@ make mobile-run
 
 ## 설계 문서
 
+- [제품 기획서](docs/product/PRODUCT_SPEC.md)
+- [선수단 운영 정책](docs/product/SQUAD_OPERATIONS_POLICY.md)
 - [아키텍처](docs/ARCHITECTURE.md)
 - [모듈화 규칙](docs/MODULE_RULES.md)
 - [로컬 개발환경](docs/LOCAL_SETUP.md)

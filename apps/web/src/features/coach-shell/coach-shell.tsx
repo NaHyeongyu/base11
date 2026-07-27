@@ -6,22 +6,15 @@ import { useState } from "react";
 import { Icon, type IconName } from "@/shared/ui/icon";
 
 const navigation: Array<{ title: string; items: Array<{ href: string; label: string; icon: IconName; badge?: number }> }> = [
-  { title: "COACHING FLOW", items: [
-    { href: "/dashboard", label: "마이크로사이클", icon: "home" },
-    { href: "/schedule", label: "주간 계획", icon: "calendar" },
-    { href: "/staff-review", label: "스태프 검토", icon: "feedback", badge: 3 },
-  ] },
-  { title: "PLAYER & DATA", items: [
-    { href: "/missions", label: "선수 목표", icon: "target" },
-    { href: "/feedback", label: "회고·피드백", icon: "feedback", badge: 5 },
-    { href: "/wellbeing", label: "선수 이슈", icon: "heart" },
-    { href: "/performance", label: "퍼포먼스 데이터", icon: "download" },
-    { href: "/matches", label: "경기 기록", icon: "match" },
-  ] },
-  { title: "TEAM", items: [
+  { title: "COACH DESKTOP", items: [
+    { href: "/dashboard", label: "대시보드", icon: "home" },
+    { href: "/schedule", label: "일정", icon: "calendar" },
     { href: "/roster", label: "선수단", icon: "users" },
-    { href: "/notices", label: "역할별 게시", icon: "notice" },
-    { href: "/team", label: "팀·권한", icon: "shield" },
+    { href: "/wellbeing", label: "스쿼드 상태", icon: "heart" },
+    { href: "/feedback", label: "미션·피드백", icon: "feedback", badge: 5 },
+    { href: "/matches", label: "경기 기록", icon: "match" },
+    { href: "/notices", label: "공지", icon: "notice" },
+    { href: "/team", label: "설정", icon: "settings" },
   ] },
 ];
 
@@ -48,7 +41,7 @@ export function CoachShell({ children }: Readonly<{ children: React.ReactNode }>
           {navigation.map((group) => <div className="nav-group" key={group.title}>
             <p>{group.title}</p>
             {group.items.map((item) => {
-              const active = pathname === item.href;
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return <Link key={item.href} href={item.href} className={active ? "active" : ""} onClick={() => setOpen(false)}>
                 <Icon name={item.icon} /><span>{item.label}</span>{item.badge && <em>{item.badge}</em>}
               </Link>;
