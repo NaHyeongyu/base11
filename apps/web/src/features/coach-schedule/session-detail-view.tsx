@@ -1,16 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
-  calendarEvents,
+  defaultTrainingPlan,
+  defaultTrainingPlayerData,
   matchMoments,
   sessionPlayers,
-  trainingBlocks,
-  weekCalendarEvents,
   type CalendarEvent,
   type CalendarEventType,
 } from "@/features/coach-schedule/data/schedule-preview-data";
+import { useScheduleStore } from "@/features/coach-schedule/model/schedule-store";
+import { ScheduleEventEditor } from "@/features/coach-schedule/schedule-event-editor";
+import { TrainingPlayerDataPanel } from "@/features/coach-schedule/training-player-data-panel";
 import { Badge, ProgressBar } from "@/shared/ui/components";
 import { Icon } from "@/shared/ui/icon";
 
@@ -41,14 +44,6 @@ const fallbackSession: CalendarEvent = {
   location: "보조구장 B",
 };
 
-function getSession(sessionId: string) {
-  return [...calendarEvents, ...weekCalendarEvents].find((event) => event.id === sessionId) ?? {
-    ...fallbackSession,
-    id: sessionId,
-    type: sessionId.startsWith("match") ? "match" as const : fallbackSession.type,
-  };
-}
-
 function addMinutes(time: string, minutes: number) {
   const [hour, minute] = time.split(":").map(Number);
   const total = hour * 60 + minute + minutes;
@@ -58,9 +53,10 @@ function addMinutes(time: string, minutes: number) {
 function getTrainingBlocks(session: CalendarEvent) {
   let elapsed = 0;
   let remaining = session.duration ?? 120;
-  return trainingBlocks.flatMap((block) => {
+  const blocks = session.planBlocks?.length ? session.planBlocks : defaultTrainingPlan;
+  return blocks.flatMap((block) => {
     if (remaining <= 0) return [];
-    const plannedDuration = Number.parseInt(block.duration, 10);
+    const plannedDuration = block.duration;
     const duration = Math.min(plannedDuration, remaining);
     const adjusted = {
       ...block,
@@ -104,8 +100,12 @@ function OverviewTab({ match, session }: { match: boolean; session: CalendarEven
     <div className="session-main-stack">
       <section className="session-card">
         <header><div><h3>{match ? "주요 경기 장면" : "오늘 훈련 내용"}</h3><p>{match ? "득점·교체·부상·전술 변경 8건" : `${sessionTrainingBlocks.length}개 블록 · 총 ${session.duration ?? 120}분 · 담당별 실행 순서`}</p></div><button>{match ? "경기 기록 편집" : "계획 편집"}</button></header>
-        {match ? <div className="match-moment-list">{matchMoments.map((moment) => <article key={`${moment.minute}-${moment.title}`}><time>{moment.minute}</time><Badge tone={moment.type === "GOAL" ? "green" : moment.type === "MEDICAL" ? "red" : "purple"}>{moment.type}</Badge><strong>{moment.title}</strong><span>{moment.detail}</span></article>)}</div> : <div className="training-block-list">{sessionTrainingBlocks.map((block) => <article key={block.time}><time>{block.time}</time><i /><strong>{block.title}</strong><span>{block.group} · {block.owner}</span><Badge tone={block.intensity === "High" ? "red" : block.intensity === "Medium" ? "blue" : "green"}>{block.intensity}</Badge><em>{block.duration}</em></article>)}</div>}
+        {match ? <div className="match-moment-list">{matchMoments.map((moment) => <article key={`${moment.minute}-${moment.title}`}><time>{moment.minute}</time><Badge tone={moment.type === "GOAL" ? "green" : moment.type === "MEDICAL" ? "red" : "purple"}>{moment.type}</Badge><strong>{moment.title}</strong><span>{moment.detail}</span></article>)}</div> : <div className="training-block-list">{sessionTrainingBlocks.map((block, index) => <article key={block.id}><time>{block.time}</time><i /><strong>{block.title}</strong><span>{block.point}</span><Badge tone={index === 2 ? "red" : index === 0 ? "green" : "blue"}>{index === 2 ? "High" : index === 0 ? "Low" : "Medium"}</Badge><em>{block.duration}</em></article>)}</div>}
       </section>
+      {!match && <section className="session-card training-session-brief">
+        <header><div><h3>훈련 목적·코칭 포인트</h3><p>지도자가 세션에서 반복할 기준입니다.</p></div></header>
+        <div><article><small>훈련 목적</small><p>{session.objective}</p></article><article><small>핵심 포인트</small><p>{session.coachingPoints}</p></article><article><small>운영 메모</small><p>{session.memo}</p></article></div>
+      </section>}
       <section className="session-card">
         <header><div><h3>{match ? "선수 퍼포먼스 · 경기 부하" : "선수 상태 · GPS"}</h3><p>예외·상위 부하·피드백 대기 선수를 우선 확인합니다.</p></div><Badge tone="orange">예외 {match ? "2" : "3"} · 전체 {match ? "18" : "26"}</Badge></header>
         <PlayerTable match={match} />
@@ -174,7 +174,21 @@ function OperationalOverview({ session }: { session: CalendarEvent }) {
   </div>;
 }
 
-function PlayersTab({ match }: { match: boolean }) {
+function PlayersTab({
+  match,
+  session,
+  onPlayerDataChange,
+}: {
+  match: boolean;
+  session: CalendarEvent;
+  onPlayerDataChange: (playerData: NonNullable<CalendarEvent["playerData"]>) => void;
+}) {
+  if (!match) {
+    return <TrainingPlayerDataPanel
+      players={session.playerData?.length ? session.playerData : defaultTrainingPlayerData}
+      onChange={onPlayerDataChange}
+    />;
+  }
   return <div className="session-tab-layout">
     <section className="session-card session-roster-panel">
       <header><div><h3>{match ? "출전 선수 18명" : "훈련 대상 선수 26명"}</h3><p>컨디션과 가용 상태를 기준으로 예외 선수를 먼저 표시합니다.</p></div><button>선수 구성 편집</button></header>
@@ -224,10 +238,22 @@ function FeedbackTab({ match }: { match: boolean }) {
 }
 
 export function SessionDetailView({ sessionId }: { sessionId: string }) {
-  const session = getSession(sessionId);
+  const router = useRouter();
+  const { eventsById, templates, updateEvent, deleteEvent, createTemplate } = useScheduleStore();
+  const storedSession = eventsById.get(sessionId);
+  const session = storedSession ?? {
+    ...fallbackSession,
+    id: sessionId,
+    type: sessionId.startsWith("match") ? "match" as const : fallbackSession.type,
+    planBlocks: defaultTrainingPlan,
+    playerData: defaultTrainingPlayerData,
+  };
   const match = session.type === "match";
   const performanceSession = session.type === "training" || match;
   const [tab, setTab] = useState<SessionTab>("overview");
+  const [editing, setEditing] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [savedNotice, setSavedNotice] = useState("");
   const title = session.id === "match-20260720" ? "FC 안양 U18  2 – 1  수원FC U18" : session.title;
   const sessionMeta = [
     `7월 ${session.day}일`,
@@ -244,18 +270,56 @@ export function SessionDetailView({ sessionId }: { sessionId: string }) {
       : [["시간", session.duration ? `${session.duration}분` : "종일"], ["대상", operation?.participants ?? "팀"], ["상태", "확정"], ["메모", "1건"]];
   const tabCopy = useMemo(() => tabLabels.map((item) => ({ ...item, label: item.id === "players" ? `${item.label} ${match ? 18 : 26}` : item.id === "gps" ? (match ? "GPS · 경기 부하" : "GPS · RPE") : item.id === "feedback" ? `${item.label} ${match ? 3 : 2}` : item.label })), [match]);
   return <div className="session-detail-page">
-    <Link className="session-back" href="/schedule">‹ 일정으로 돌아가기</Link>
+    <div className="session-detail-toolbar">
+      <Link className="session-back" href="/schedule">‹ 일정으로 돌아가기</Link>
+      {(session.type === "training" || session.type === "match") && <div>
+        <button className="delete-session-button" onClick={() => setConfirmDelete(true)}>일정 삭제</button>
+        <button className="edit-session-button" onClick={() => setEditing(true)}><Icon name="edit" size={15} />일정 수정</button>
+      </div>}
+    </div>
     <section className="session-hero">
       <div className="session-hero-kicker"><Badge tone={match ? "orange" : "blue"}>{sessionTypeLabels[session.type]} · {match ? "종료" : "진행 전"}</Badge><span>{match ? "기록 완성도 96% · GPS 1명 확인 필요" : "마지막 수정 12분 전 · 김태호"}</span></div>
       <div className="session-hero-main"><div><h1>{title}</h1><p>{sessionMeta}</p></div>
         <div>{heroStats.map(([label, value]) => <span key={label}><small>{label}</small><strong>{value}</strong></span>)}</div>
       </div>
-      {performanceSession && <div className="session-tabs">{tabCopy.map((item) => <button className={tab === item.id ? "active" : ""} key={item.id} onClick={() => setTab(item.id)}>{item.label}</button>)}</div>}
+      {performanceSession && <div className="session-tabs">{tabCopy.map((item) => <button className={tab === item.id ? "active" : ""} key={item.id} onClick={() => setTab(item.id)}>{item.id === "players" && !match ? `선수 데이터 ${session.playerData?.length ?? defaultTrainingPlayerData.length}` : item.label}</button>)}</div>}
     </section>
     {!performanceSession && <OperationalOverview session={session} />}
     {performanceSession && tab === "overview" && <OverviewTab match={match} session={session} />}
-    {performanceSession && tab === "players" && <PlayersTab match={match} />}
+    {performanceSession && tab === "players" && <PlayersTab match={match} session={session} onPlayerDataChange={(playerData) => {
+      updateEvent(session.id, { playerData });
+      setSavedNotice("선수별 훈련 데이터와 퀵 피드백을 저장했습니다.");
+    }} />}
     {performanceSession && tab === "gps" && <GpsTab match={match} />}
     {performanceSession && tab === "feedback" && <FeedbackTab match={match} />}
+    {savedNotice && <div className="schedule-toast" role="status"><Icon name="check" size={16} />{savedNotice}<button onClick={() => setSavedNotice("")} aria-label="알림 닫기"><Icon name="close" size={14} /></button></div>}
+    {editing && <ScheduleEventEditor
+      mode="edit"
+      initialEvent={session}
+      defaultType={match ? "match" : "training"}
+      defaultDay={session.day}
+      templates={templates}
+      onClose={() => setEditing(false)}
+      onSave={(updated) => {
+        updateEvent(session.id, updated);
+        setEditing(false);
+        setSavedNotice("일정과 훈련 데이터를 수정했습니다.");
+      }}
+      onSaveTemplate={(template) => {
+        createTemplate(template);
+        setSavedNotice(`${template.name} 템플릿을 저장했습니다.`);
+      }}
+    />}
+    {confirmDelete && <div className="schedule-modal-backdrop" role="presentation">
+      <section className="delete-session-dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-session-title">
+        <span><Icon name="notice" size={22} /></span>
+        <h2 id="delete-session-title">{session.title} 일정을 삭제할까요?</h2>
+        <p>캘린더에서 일정과 연결된 훈련 데이터가 함께 사라집니다. 이 작업은 되돌릴 수 없습니다.</p>
+        <div><button onClick={() => setConfirmDelete(false)}>취소</button><button onClick={() => {
+          deleteEvent(session.id);
+          router.push("/schedule");
+        }}>일정 삭제</button></div>
+      </section>
+    </div>}
   </div>;
 }

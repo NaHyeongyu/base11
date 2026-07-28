@@ -12,6 +12,25 @@ export const microcycleDays = [
 
 export type CalendarEventType = "training" | "match" | "meeting" | "recovery" | "off";
 
+export type TrainingPlanBlock = {
+  id: string;
+  title: string;
+  duration: number;
+  point: string;
+};
+
+export type TrainingPlayerData = {
+  playerId: number;
+  number: number;
+  name: string;
+  condition: number;
+  status: "정상" | "관찰" | "제한" | "재활";
+  participation: "전체" | "제한" | "제외";
+  rpe: number;
+  feedback: string;
+  feedbackSent: boolean;
+};
+
 export type CalendarEvent = {
   id: string;
   day: number;
@@ -21,6 +40,13 @@ export type CalendarEvent = {
   duration?: number;
   location?: string;
   detail?: string;
+  objective?: string;
+  coachingPoints?: string;
+  memo?: string;
+  opponent?: string;
+  competition?: string;
+  planBlocks?: TrainingPlanBlock[];
+  playerData?: TrainingPlayerData[];
 };
 
 export type WeekCalendarEvent = CalendarEvent & {
@@ -70,6 +96,14 @@ export const trainingBlocks = [
   { time: "18:40", duration: "20분", title: "쿨다운·개별 목표", owner: "최은지", group: "전체", intensity: "Low" },
 ];
 
+export const defaultTrainingPlan: TrainingPlanBlock[] = [
+  { id: "warmup", title: "프리액티베이션", duration: 15, point: "가동범위와 부상 위험 확인" },
+  { id: "position", title: "포지션별 패턴", duration: 25, point: "받기 전 시야와 몸의 각도" },
+  { id: "transition", title: "전환 게임 8v8+3", duration: 30, point: "볼 상실 후 5초 반응" },
+  { id: "tactical", title: "상대 빌드업 대응", duration: 30, point: "1선 압박 방향과 2선 간격" },
+  { id: "cooldown", title: "쿨다운·개별 목표", duration: 20, point: "통증 확인과 다음 과제 공유" },
+];
+
 export const sessionPlayers = [
   { number: 11, name: "김민수", status: "정상", minutes: "90′", distance: "10.9km", hsr: "1.14km", sprint: "21", rpe: "6", max: "31.8", feedback: "총평 대기" },
   { number: 7, name: "박준호", status: "정상", minutes: "90′", distance: "11.2km", hsr: "1.22km", sprint: "23", rpe: "7", max: "32.4", feedback: "회고 완료" },
@@ -77,6 +111,79 @@ export const sessionPlayers = [
   { number: 20, name: "윤시우", status: "재활", minutes: "22′", distance: "3.1km", hsr: "0.31km", sprint: "2", rpe: "4", max: "30.0", feedback: "메모 연결" },
   { number: 18, name: "최우진", status: "제한", minutes: "90′", distance: "10.2km", hsr: "0.96km", sprint: "10", rpe: "5", max: "30.7", feedback: "전달 완료" },
   { number: 9, name: "오세훈", status: "GPS 누락", minutes: "76′", distance: "—", hsr: "—", sprint: "—", rpe: "—", max: "—", feedback: "데이터 확인" },
+];
+
+export const defaultTrainingPlayerData: TrainingPlayerData[] = [
+  { playerId: 1, number: 11, name: "김민수", condition: 86, status: "정상", participation: "전체", rpe: 6, feedback: "첫 터치 전에 다음 패스 방향을 먼저 확인해보자.", feedbackSent: false },
+  { playerId: 2, number: 7, name: "박준호", condition: 78, status: "정상", participation: "전체", rpe: 7, feedback: "전환 순간 첫 세 걸음의 속도를 끝까지 유지해보자.", feedbackSent: true },
+  { playerId: 3, number: 4, name: "이도윤", condition: 52, status: "관찰", participation: "제한", rpe: 5, feedback: "발목 상태를 보면서 방향 전환 각도를 작게 시작하자.", feedbackSent: false },
+  { playerId: 4, number: 18, name: "최우진", condition: 91, status: "제한", participation: "제한", rpe: 5, feedback: "고강도 반복 수보다 움직임의 타이밍에 집중하자.", feedbackSent: true },
+  { playerId: 5, number: 1, name: "정현우", condition: 84, status: "정상", participation: "전체", rpe: 6, feedback: "빌드업 시작 위치를 조금 더 빠르게 잡아보자.", feedbackSent: false },
+  { playerId: 6, number: 14, name: "한지민", condition: 73, status: "정상", participation: "전체", rpe: 6, feedback: "압박 전 등 뒤 공간을 한 번 더 확인해보자.", feedbackSent: false },
+  { playerId: 7, number: 20, name: "윤시우", condition: 45, status: "재활", participation: "제외", rpe: 3, feedback: "오늘은 패스와 전술 설명만 참여하고 통증을 바로 알려줘.", feedbackSent: true },
+  { playerId: 8, number: 9, name: "오세훈", condition: 82, status: "정상", participation: "전체", rpe: 6, feedback: "문전에서 첫 선택을 단순하게 가져가보자.", feedbackSent: false },
+];
+
+export type TrainingTemplate = {
+  id: string;
+  name: string;
+  title: string;
+  duration: number;
+  location: string;
+  objective: string;
+  coachingPoints: string;
+  memo: string;
+  planBlocks: TrainingPlanBlock[];
+  builtIn?: boolean;
+};
+
+export const initialTrainingTemplates: TrainingTemplate[] = [
+  {
+    id: "template-md2-transition",
+    name: "MD-2 전환·전술",
+    title: "포지션 전환 훈련",
+    duration: 120,
+    location: "보조구장 B",
+    objective: "경기 상황에서 공수 전환 원칙과 포지션별 역할을 정교화합니다.",
+    coachingPoints: "볼 상실 후 5초 반응 / 첫 패스 전 몸의 각도 / 수비 간격 8m 유지",
+    memo: "제한 참여 선수는 고강도 블록 반복 수를 조정합니다.",
+    planBlocks: defaultTrainingPlan,
+    builtIn: true,
+  },
+  {
+    id: "template-md1-setpiece",
+    name: "MD-1 세트피스",
+    title: "세트피스 훈련",
+    duration: 65,
+    location: "메인구장",
+    objective: "경기 전 공격·수비 세트피스 역할과 킥 위치를 최종 확인합니다.",
+    coachingPoints: "세컨드볼 위치 / 키커 신호 / 수비 라인 동시 출발",
+    memo: "고강도 러닝 없이 전술 정확도 중심으로 운영합니다.",
+    planBlocks: [
+      { id: "setpiece-warmup", title: "볼 워밍업", duration: 10, point: "킥 감각과 가동범위 확인" },
+      { id: "attacking-setpiece", title: "공격 세트피스", duration: 25, point: "키커 신호와 1·2차 움직임" },
+      { id: "defending-setpiece", title: "수비 세트피스", duration: 20, point: "마킹 전달과 세컨드볼 위치" },
+      { id: "setpiece-review", title: "상황 복기", duration: 10, point: "선수별 역할 재확인" },
+    ],
+    builtIn: true,
+  },
+  {
+    id: "template-recovery",
+    name: "경기 후 회복",
+    title: "회복·리셋 훈련",
+    duration: 70,
+    location: "회복실·보조구장",
+    objective: "경기 부하를 낮추고 개인별 통증과 회복 상태를 확인합니다.",
+    coachingPoints: "통증 즉시 공유 / 낮은 심박 유지 / 개인 보완 분리",
+    memo: "경기 60분 이상 출전 선수와 미출전 선수를 분리 운영합니다.",
+    planBlocks: [
+      { id: "recovery-bike", title: "저강도 유산소", duration: 20, point: "RPE 3 이하 유지" },
+      { id: "recovery-mobility", title: "모빌리티", duration: 20, point: "고관절·발목 가동범위" },
+      { id: "recovery-individual", title: "개별 보완", duration: 20, point: "출전 시간별 프로그램 분리" },
+      { id: "recovery-check", title: "컨디션 체크", duration: 10, point: "통증과 다음 참여 판단" },
+    ],
+    builtIn: true,
+  },
 ];
 
 export const matchMoments = [
