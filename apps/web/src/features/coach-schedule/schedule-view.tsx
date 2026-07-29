@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import {
   defaultTrainingPlayerData,
   type CalendarEvent,
-  type CalendarEventType,
   type TrainingTemplate,
 } from "@/features/coach-schedule/data/schedule-preview-data";
 import { useScheduleStore } from "@/features/coach-schedule/model/schedule-store";
@@ -23,14 +22,6 @@ const weekDays = [
   { label: "토", day: 19 },
   { label: "일", day: 20 },
 ];
-
-const eventLabel: Record<CalendarEventType, string> = {
-  training: "훈련",
-  match: "경기",
-  meeting: "미팅",
-  recovery: "회복",
-  off: "휴식",
-};
 
 type EditorState = {
   type: "training" | "match";
@@ -51,42 +42,42 @@ function EventCard({ event, compact = false }: { event: CalendarEvent; compact?:
 
 function CalendarHeader({
   view,
+  events,
   onViewChange,
   onCreate,
   onOpenTemplates,
 }: {
   view: "month" | "week";
+  events: CalendarEvent[];
   onViewChange: (view: "month" | "week") => void;
-  onCreate: (type: "training" | "match") => void;
+  onCreate: () => void;
   onOpenTemplates: () => void;
 }) {
-  return <div className="calendar-page-header schedule-crud-header">
-    <div>
-      <h1>{view === "month" ? "2026년 7월" : "7월 14일–20일"}</h1>
-      <p>{view === "month" ? "훈련·경기를 만들고 월간 운영 흐름을 관리합니다." : "한 주의 시간대별 세션과 운영 충돌을 확인합니다."}</p>
+  const trainingCount = events.filter((event) => event.type === "training").length;
+  const matchCount = events.filter((event) => event.type === "match").length;
+  return <>
+    <div className="calendar-page-header schedule-crud-header">
+      <div>
+        <h1>{view === "month" ? "2026년 7월" : "7월 14일–20일"}</h1>
+        <p>전체 {events.length}개 · 훈련 {trainingCount}개 · 경기 {matchCount}개</p>
+      </div>
+      <div className="schedule-primary-actions">
+        <button className="template-button" onClick={onOpenTemplates}><Icon name="download" size={15} />템플릿</button>
+        <button className="training-create-button" onClick={onCreate}><Icon name="plus" size={16} />일정 추가</button>
+      </div>
     </div>
-    <div className="schedule-primary-actions">
-      <button className="template-button" onClick={onOpenTemplates}><Icon name="download" size={16} />훈련 템플릿</button>
-      <button className="match-create-button" onClick={() => onCreate("match")}><Icon name="match" size={16} />경기 추가</button>
-      <button className="training-create-button" onClick={() => onCreate("training")}><Icon name="plus" size={16} />훈련 추가</button>
-    </div>
-    <div className="calendar-header-actions">
-      <button aria-label="이전 기간">‹</button><button aria-label="다음 기간">›</button><button className="today">오늘</button>
+    <div className="calendar-toolbar">
+      <div className="calendar-header-actions">
+        <button aria-label="이전 기간">‹</button>
+        <button className="today">오늘</button>
+        <button aria-label="다음 기간">›</button>
+      </div>
       <div className="calendar-view-toggle" aria-label="캘린더 보기">
         <button className={view === "month" ? "active" : ""} onClick={() => onViewChange("month")}>월</button>
         <button className={view === "week" ? "active" : ""} onClick={() => onViewChange("week")}>주</button>
       </div>
     </div>
-  </div>;
-}
-
-function CalendarLegend({ events }: { events: CalendarEvent[] }) {
-  const trainingCount = events.filter((event) => event.type === "training").length;
-  const matchCount = events.filter((event) => event.type === "match").length;
-  return <div className="calendar-legend">
-    <strong>FC 안양 U18 · 전체 일정 <small>훈련 {trainingCount} · 경기 {matchCount}</small></strong>
-    <div>{(["training", "match", "meeting", "recovery"] as CalendarEventType[]).map((type) => <span key={type}><i className={`type-${type}`} />{eventLabel[type]}</span>)}</div>
-  </div>;
+  </>;
 }
 
 function MonthView({ events, onCreateAtDay }: { events: CalendarEvent[]; onCreateAtDay: (day: number) => void }) {
@@ -168,15 +159,14 @@ export function ScheduleView() {
   return <div className="calendar-page">
     <CalendarHeader
       view={view}
+      events={events}
       onViewChange={setView}
-      onCreate={(type) => setEditor({ type, day: currentDay })}
+      onCreate={() => setEditor({ type: "training", day: currentDay })}
       onOpenTemplates={() => setTemplatesOpen(true)}
     />
-    <CalendarLegend events={events} />
     {view === "month"
       ? <MonthView events={events} onCreateAtDay={(day) => setEditor({ type: "training", day })} />
       : <WeekView events={events} onCreateAtDay={(day) => setEditor({ type: "training", day })} />}
-    <div className="calendar-footnote"><Icon name="calendar" size={15} /><span>일정을 선택하면 훈련·경기 데이터 편집, 선수별 퀵 피드백, 삭제까지 상세에서 관리할 수 있습니다.</span></div>
     {notice && <div className="schedule-toast" role="status"><Icon name="check" size={16} />{notice}<button onClick={() => setNotice("")} aria-label="알림 닫기"><Icon name="close" size={14} /></button></div>}
 
     {editor && <ScheduleEventEditor
