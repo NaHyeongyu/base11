@@ -1737,3 +1737,37 @@ body {
   color: #5e6772;
   background: #eef0f2;
 }
+
+/* Keep cards, badges, and rows free of decorative left-side accents. */
+.calendar-event {
+  border-left: 0;
+}
+
+.calendar-pill,
+.calendar-pill.type-match,
+.calendar-pill.type-meeting,
+.calendar-pill.type-recovery,
+.calendar-pill.type-off {
+  border-left: 1px solid #e8ebef;
+}
+
+.squad-attention-panel > article.danger,
+.squad-attention-panel > article.warning,
+.squad-attention-panel > article.info,
+.player-decision-card,
+.player-feedback-card,
+.role-visibility-card,
+.notice-audit-card,
+.unread-alert {
+  border-left-width: 1px;
+  border-left-color: var(--line);
+}
+
+.training-player-data-table > button.attention {
+  box-shadow: none;
+}
+
+.notification-list article.unread::before,
+.squad-player-row.exception::before {
+  display: none;
+}
