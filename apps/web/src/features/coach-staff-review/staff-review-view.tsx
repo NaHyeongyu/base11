@@ -10,7 +10,7 @@ export function StaffReviewView() {
   const [resolved, setResolved] = useState<number[]>([]);
 
   return <>
-    <PageHeader eyebrow="STAFF COLLABORATION" title="스태프 검토" description="메신저에 흩어진 의견 대신 세션 맥락 안에서 제안, 결정, 담당과 변경 이력을 관리합니다." />
+    <PageHeader eyebrow="지도자 협업" title="스태프 검토" description="훈련과 경기 안에서 의견을 검토하고 결정과 담당자를 기록합니다." />
     <div className="metric-grid four compact">
       <MetricCard label="검토 대기" value={`${staffReviews.length - resolved.length}건`} helper="오늘 게시 전 확인" tone="orange" />
       <MetricCard label="내 담당" value="2건" helper="전술 1 · 승인 1" tone="blue" />

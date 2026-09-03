@@ -1,8 +1,8 @@
 import { Icon, type IconName } from "@/shared/ui/icon";
 import type { Tone } from "@/shared/model/tone";
 
-export function PageHeader({ eyebrow, title, description, action }: { eyebrow: string; title: string; description: string; action?: React.ReactNode }) {
-  return <header className="page-header"><div><p className="page-eyebrow">{eyebrow}</p><h1>{title}</h1><p className="page-description">{description}</p></div>{action && <div className="page-actions">{action}</div>}</header>;
+export function PageHeader({ eyebrow, title, description, action }: { eyebrow: string; title: string; description?: string; action?: React.ReactNode }) {
+  return <header className="page-header"><div><p className="page-eyebrow">{eyebrow}</p><h1>{title}</h1>{description && <p className="page-description">{description}</p>}</div>{action && <div className="page-actions">{action}</div>}</header>;
 }
 
 export function ActionButton({ children, icon = "plus", secondary = false }: { children: React.ReactNode; icon?: IconName; secondary?: boolean }) {

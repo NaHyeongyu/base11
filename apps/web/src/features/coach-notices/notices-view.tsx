@@ -25,7 +25,7 @@ export function NoticesView() {
   const selected = filtered[0] ?? notices[0];
 
   return <div className="notice-center-page">
-    <PageHeader eyebrow="OFFICIAL COMMUNICATION" title="공지 센터" description="공식 정보를 전체·선수단·학부모·지도자 대상으로 구분해 전달하고 확인합니다." action={<ActionButton>공지 작성</ActionButton>} />
+    <PageHeader eyebrow="팀 공지 관리" title="공지" description="공지 작성, 대상 설정, 확인 여부를 한 화면에서 관리합니다." action={<ActionButton>공지 작성</ActionButton>} />
     <div className="metric-grid four compact notice-metrics">
       <MetricCard label="게시 중" value="12개" helper="예약 1개" tone="blue" />
       <MetricCard label="평균 확인율" value="94%" helper="지난달 +3%" tone="green" />

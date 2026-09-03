@@ -1,0 +1,349 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "BASE11 지도자 중심 제품 재정렬",
+    "description": "현재 구현을 실제 코드와 화면 기준으로 점검하고, 감독·코치·팀 매니저가 한 시즌을 운영할 수 있도록 우선순위를 다시 정리한 제품 전략 보고서입니다.",
+    "generatedAt": "2026-08-22T22:30:00+10:00",
+    "charts": [
+      {
+        "id": "readiness_chart",
+        "title": "구현 준비도 판정",
+        "subtitle": "0 미착수 · 1 기획/프리뷰 · 2 부분 구현 · 3 운영 가능",
+        "type": "bar",
+        "dataset": "readiness_chart",
+        "sourceId": "readiness_query",
+        "valueFormat": "number",
+        "layout": "full",
+        "encodings": {
+          "x": { "field": "area", "type": "nominal", "label": "영역" },
+          "y": { "field": "stage_level", "type": "quantitative", "label": "판정 단계" },
+          "tooltip": [
+            { "field": "stage_label", "type": "text", "label": "판정" },
+            { "field": "gap", "type": "text", "label": "핵심 간극" }
+          ]
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "current_status_table",
+        "title": "현재 구현 상태",
+        "subtitle": "2026년 8월 22일 코드·문서·로컬 화면·검증 결과 기준",
+        "dataset": "current_status",
+        "sourceId": "current_status_query",
+        "defaultSort": { "field": "order", "direction": "asc" },
+        "density": "spacious",
+        "layout": "full",
+        "columns": [
+          { "field": "order", "label": "순서", "type": "number" },
+          { "field": "area", "label": "영역", "type": "text" },
+          { "field": "working", "label": "현재 되는 것", "type": "text" },
+          { "field": "gap", "label": "운영을 막는 간극", "type": "text" },
+          { "field": "stage", "label": "제품 단계", "type": "text" }
+        ]
+      },
+      {
+        "id": "ia_reframe_table",
+        "title": "지도자 중심 정보 구조",
+        "subtitle": "기능별 메뉴를 지도자의 업무 순서와 책임 단위로 재구성",
+        "dataset": "ia_reframe",
+        "sourceId": "ia_reframe_query",
+        "defaultSort": { "field": "order", "direction": "asc" },
+        "density": "spacious",
+        "layout": "full",
+        "columns": [
+          { "field": "order", "label": "순서", "type": "number" },
+          { "field": "new_area", "label": "새 1Depth", "type": "text" },
+          { "field": "job", "label": "지도자가 끝내는 일", "type": "text" },
+          { "field": "absorbs", "label": "흡수할 현재 기능", "type": "text" }
+        ]
+      },
+      {
+        "id": "operating_loop_table",
+        "title": "P0 지도자 운영 루프",
+        "subtitle": "한 팀이 외부 도구 없이 주간 훈련 운영을 끝낼 수 있는 최소 범위",
+        "dataset": "operating_loop",
+        "sourceId": "operating_loop_query",
+        "defaultSort": { "field": "order", "direction": "asc" },
+        "density": "spacious",
+        "layout": "full",
+        "columns": [
+          { "field": "order", "label": "순서", "type": "number" },
+          { "field": "step", "label": "단계", "type": "text" },
+          { "field": "coach_outcome", "label": "지도자 결과", "type": "text" },
+          { "field": "completion", "label": "P0 완료 기준", "type": "text" }
+        ]
+      },
+      {
+        "id": "roadmap_table",
+        "title": "8주 실행 순서",
+        "subtitle": "화면 확장보다 실제 데이터로 닫히는 한 개의 수직 흐름을 우선",
+        "dataset": "roadmap",
+        "sourceId": "roadmap_query",
+        "defaultSort": { "field": "order", "direction": "asc" },
+        "density": "spacious",
+        "layout": "full",
+        "columns": [
+          { "field": "order", "label": "순서", "type": "number" },
+          { "field": "period", "label": "기간", "type": "text" },
+          { "field": "theme", "label": "목표", "type": "text" },
+          { "field": "scope", "label": "구현 범위", "type": "text" },
+          { "field": "exit", "label": "통과 조건", "type": "text" }
+        ]
+      },
+      {
+        "id": "success_metrics_table",
+        "title": "파일럿 성공 지표",
+        "subtitle": "기능 사용량보다 지도자 운영 루프가 얼마나 자주 닫히는지 측정",
+        "dataset": "success_metrics",
+        "sourceId": "success_metrics_query",
+        "defaultSort": { "field": "order", "direction": "asc" },
+        "density": "spacious",
+        "layout": "full",
+        "columns": [
+          { "field": "order", "label": "순서", "type": "number" },
+          { "field": "metric", "label": "지표", "type": "text" },
+          { "field": "definition", "label": "정의", "type": "text" },
+          { "field": "pilot_target", "label": "초기 목표", "type": "text" }
+        ]
+      }
+    ],
+    "sources": [
+      { "id": "readiness_query", "label": "구현 준비도 판정", "path": "source-notes.md" },
+      { "id": "current_status_query", "label": "현재 구현 상태 감사", "path": "source-notes.md" },
+      { "id": "ia_reframe_query", "label": "지도자 중심 정보 구조 권고", "path": "source-notes.md" },
+      { "id": "operating_loop_query", "label": "P0 지도자 운영 루프 권고", "path": "source-notes.md" },
+      { "id": "roadmap_query", "label": "8주 실행 순서 권고", "path": "source-notes.md" },
+      { "id": "success_metrics_query", "label": "파일럿 성공 지표 권고", "path": "source-notes.md" }
+    ],
+    "blocks": [
+      {
+        "id": "title",
+        "type": "markdown",
+        "body": "# BASE11 지도자 중심 제품 재정렬"
+      },
+      {
+        "id": "executive_summary",
+        "type": "markdown",
+        "body": "## Executive Summary\n\n- **현재 BASE11은 ‘잘 설계된 코치 데스크톱 프리뷰’ 단계입니다.** 지도자가 보고 싶은 정보 구조와 화면 완성도는 높지만, 실제 팀 데이터·권한·스쿼드·참가자·공지·저장이 한 흐름으로 연결되지 않아 시즌 운영 도구로는 아직 사용할 수 없습니다.\n\n- **방향은 맞고, 범위가 너무 넓습니다.** 예외 우선 대시보드, 경기 기준 마이크로사이클, 세션 안의 선수 상태·GPS·메모·피드백은 유지해야 합니다. 반면 선수·학부모 앱, 성장 리포트, 추천 고도화, 영상 연동은 즉시 동결하는 편이 좋습니다.\n\n- **다음 목표는 화면 추가가 아니라 한 개 팀의 운영 루프를 실제 데이터로 닫는 것입니다.** 팀·시즌·스쿼드·스태프 설정에서 시작해 일정 대상, 실제 참가자, 세션 종료 기록, 스태프 결정과 다음 계획 반영까지 서버에 남고 권한대로 보이는 수직 흐름을 먼저 완성해야 합니다."
+      },
+      {
+        "id": "current_position",
+        "type": "markdown",
+        "body": "## 현재 위치: 데모 가능한 코치 오피스, 운영 가능한 시스템은 아님\n\n**표면 완성도와 운영 완성도를 분리해서 봐야 합니다.** 코치 웹은 주요 화면이 대부분 있고 일정·훈련 상세의 상호작용도 설득력 있습니다. 하지만 일정은 한 브라우저 안에 저장되고, 나머지 핵심 화면은 프리뷰 데이터가 중심입니다. API는 좋은 기반을 갖췄지만 웹과 연결되지 않았고, 팀 운영에 필수인 스쿼드·실제 참가자·공지 대상 모델은 아직 없습니다.\n\n따라서 현재 상태를 ‘기능이 많이 구현됨’으로 표현하기보다 **제품 개념 검증과 프론트 프로토타입은 진행됐고, 운영 가능한 MVP 구축은 이제 시작되는 단계**로 보는 것이 정확합니다."
+      },
+      {
+        "id": "current_status",
+        "type": "chart",
+        "chartId": "readiness_chart"
+      },
+      {
+        "id": "current_status_table_block",
+        "type": "table",
+        "tableId": "current_status_table"
+      },
+      {
+        "id": "strengths",
+        "type": "markdown",
+        "body": "## 반드시 살려야 할 세 가지\n\n**첫째, 예외 우선입니다.** 지도자는 정상 선수 전체보다 통증, 제한 참여, 누락 데이터, 승인 대기를 먼저 봐야 합니다. 현재 대시보드와 세션 상세가 이 원칙을 가장 잘 구현하고 있습니다.\n\n**둘째, 경기에서 역산한 마이크로사이클입니다.** 일정 앱이 아니라 경기 준비와 회고를 연결하는 제품이라는 차별점이 생깁니다. 일반 팀 관리 SaaS와 구분되는 핵심입니다.\n\n**셋째, 세션 중심 데이터입니다.** 훈련 계획, 선수 상태, 실제 참가, GPS·RPE, 코치 메모와 스태프 결정을 같은 세션에 연결해야 합니다. 현재 제품 문서가 이미 올바른 중심축을 잡고 있으므로 이를 실제 데이터 모델과 화면 동선에 끝까지 반영하면 됩니다."
+      },
+      {
+        "id": "ia_problem",
+        "type": "markdown",
+        "body": "## 지금의 메뉴는 지도자의 일을 다시 분절한다\n\n현재 1Depth는 일정, 선수단, 스쿼드 상태, 피드백, 경기 기록, 공지, 설정처럼 기능별로 나뉩니다. 이는 화면을 찾기에는 쉽지만, ‘오늘 훈련을 안전하게 실행하고 기록을 끝낸다’는 실제 업무를 여러 메뉴로 쪼갭니다. 특히 경기 기록을 일정과 분리하고, 퍼포먼스·피드백을 세션 밖의 독립 작업처럼 두면 제품 원칙인 세션 중심성과 충돌합니다.\n\n**1Depth는 지도자의 책임과 시간 순서에 맞추고, 데이터 전문 기능은 세션과 선수 상세 안으로 흡수하는 편이 좋습니다.**"
+      },
+      {
+        "id": "ia_reframe",
+        "type": "table",
+        "tableId": "ia_reframe_table"
+      },
+      {
+        "id": "primary_personas",
+        "type": "markdown",
+        "body": "## 지도자와 팀 매니저를 하나의 운영팀으로 설계\n\n**감독·헤드코치는 판단의 소유자입니다.** 주간 강도, 훈련 목표, 선수 가용성, 스태프 제안, 경기 엔트리와 공개 여부를 결정합니다.\n\n**스쿼드·포지션 코치는 실행의 소유자입니다.** 담당 블록, 선수 관찰, 실제 참가와 현장 변경, 세션 회고를 기록합니다.\n\n**팀 매니저·운영 담당은 완성도의 소유자입니다.** 일정·장소·이동, 명단, 미응답·누락, 공지 전달, 스태프 권한과 기록 완성도를 관리합니다.\n\n같은 화면을 모두에게 보여주는 대신 역할별 기본 홈과 권한을 다르게 해야 합니다. 감독은 결정 대기, 코치는 오늘 세션, 팀 매니저는 누락·전달·명단 변경을 첫 화면에서 보게 하는 방식입니다."
+      },
+      {
+        "id": "operating_loop_intro",
+        "type": "markdown",
+        "body": "## 가장 먼저 닫아야 할 운영 루프\n\nP0는 ‘한 팀이 한 주의 훈련을 BASE11만으로 준비하고, 실행하고, 기록을 끝낼 수 있는가’입니다. 아래 여섯 단계 중 하나라도 다른 엑셀·메신저·개인 노트로 빠지면 제품의 핵심 가치는 성립하지 않습니다."
+      },
+      {
+        "id": "operating_loop",
+        "type": "table",
+        "tableId": "operating_loop_table"
+      },
+      {
+        "id": "priority_decision",
+        "type": "markdown",
+        "body": "## 우선순위 결정: 넓게 만들기를 멈추고 수직으로 연결\n\n**P0에 남길 것:** 팀·시즌·공식 스쿼드·운영 그룹, 스태프 역할과 권한, 선수단 등록, 일정 대상 규칙, 실제 참가자, 세션 계획과 종료, 선수 제한 정보, 스태프 검토, 코치 내부 공지, 변경 이력.\n\n**P1로 미룰 것:** GPS 업체별 자동 매핑 고도화, 추천 개선 과제 자동 생성, 장기 성장·피지컬 비교, 복잡한 외부 알림 채널, 모바일 오프라인 동기화.\n\n**당장 동결할 것:** 선수 모바일 확장, 학부모 모바일 확장, 영상 장면 연동, AI 자동 처방, 커뮤니티, 다팀 통합 분석, 장식적 화면 고도화.\n\n선수·학부모에게 정보를 전달해야 하는 요구는 남지만, 별도 앱을 키우지 말고 코치가 게시한 일정·공지를 최소한의 읽기 링크나 기존 채널로 전달하는 방식으로 먼저 검증할 수 있습니다."
+      },
+      {
+        "id": "roadmap_intro",
+        "type": "markdown",
+        "body": "## 8주 안에 확인해야 할 것\n\n로드맵의 기준은 스프린트 종료가 아니라 파일럿 팀이 실제 업무를 끝냈는지입니다. 각 단계는 이전 단계의 데이터를 그대로 이어받아야 하며, 별도 목업 화면으로 완료 처리하지 않습니다."
+      },
+      {
+        "id": "roadmap",
+        "type": "table",
+        "tableId": "roadmap_table"
+      },
+      {
+        "id": "measurement_intro",
+        "type": "markdown",
+        "body": "## 북극성 지표는 ‘세션 운영 완료율’\n\n**북극성 지표:** 예정된 훈련·경기 중 실제 참가자가 확정되고, 종료 후 24시간 안에 최소 하나의 실행 기록(RPE·GPS·코치 회고·선수 이슈 중 하나)이 남은 세션의 비율.\n\n이 지표는 단순 로그인이나 화면 조회보다 BASE11이 지도자의 실제 업무를 대체했는지를 잘 보여줍니다. 팀별·주별로 보고, 계획만 만든 세션과 실제 운영이 끝난 세션을 구분해야 합니다."
+      },
+      {
+        "id": "success_metrics",
+        "type": "table",
+        "tableId": "success_metrics_table"
+      },
+      {
+        "id": "next_steps",
+        "type": "markdown",
+        "body": "## 다음 행동\n\n1. **기획 문서를 지도자 우선 범위로 개정합니다.** 선수·학부모 모바일을 명시적으로 동결하고 P0 완료 기준을 여섯 단계 운영 루프로 바꿉니다.\n\n2. **첫 수직 슬라이스를 하나 정합니다.** ‘팀·스쿼드 설정 → 주간 일정 생성 → 26명 대상 계산 → 실제 참가 확정 → 세션 종료’ 한 경로만 실제 API로 연결합니다.\n\n3. **현재 프리뷰 화면을 새로 디자인하지 않습니다.** 대시보드·일정·세션 상세의 좋은 구조를 유지하고, 프리뷰 데이터를 서버 데이터로 교체하는 데 집중합니다.\n\n4. **지도자 2명과 팀 매니저 1명으로 주간 운영 테스트를 시작합니다.** 현재 쓰는 엑셀·메신저·노트와 비교해 준비 시간, 누락, 중복 입력, 세션 종료 시간을 관찰합니다.\n\n5. **한 팀에서 4주 연속 운영이 끝난 뒤에만 선수·학부모 경험을 재개합니다.** 그때 필요한 정보와 알림이 실제 코치 데이터에서 자연스럽게 나오는지 확인합니다."
+      },
+      {
+        "id": "further_questions",
+        "type": "markdown",
+        "body": "## Further Questions\n\n- 팀 매니저는 별도 직무인가, 감독·코치가 겸임하는가? 이 답이 권한과 기본 홈을 바꿉니다.\n\n- 파일럿 팀의 현재 기준 도구는 무엇인가? 캘린더, 카카오톡, 엑셀, GPS 업체, 문서 양식을 정확히 알아야 전환 순서를 정할 수 있습니다.\n\n- 세션 종료의 최소 기록은 무엇인가? 코치 회고 하나만으로 충분한지, 실제 참가자와 RPE가 필수인지 현장 합의가 필요합니다.\n\n- U16·U17·U18 혼합 운영이 첫 파일럿의 필수 조건인가? 아니라면 데이터 모델은 준비하되 첫 화면은 단일 스쿼드로 단순화할 수 있습니다."
+      },
+      {
+        "id": "caveats",
+        "type": "markdown",
+        "body": "## Caveats and Assumptions\n\n이 판단은 2026년 8월 22일의 저장소, 제품 문서, 로컬 코치 웹 화면과 자동 검증 결과에 근거합니다. 실제 지도자 인터뷰, 파일럿 사용 로그, 팀별 운영 시간 데이터는 아직 없으므로 사용자 가치와 목표 수치는 검증 전 가설입니다.\n\n모바일 위젯 테스트는 통과했지만 정적 분석은 Flutter 기본 타입을 인식하지 못하는 다수 오류로 실패했습니다. 도구·패키지 경로 문제일 가능성이 있으나, 원인이 확정되기 전까지 모바일은 배포 준비 상태로 간주하지 않았습니다."
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2026-08-22T22:30:00+10:00",
+    "status": "ready",
+    "datasets": {
+      "readiness_chart": [
+        { "area": "코치 웹 경험", "stage_level": 2, "stage_label": "부분 구현", "gap": "프리뷰 데이터와 실제 저장·발송 미연결" },
+        { "area": "일정·훈련 편집", "stage_level": 2, "stage_label": "부분 구현", "gap": "브라우저 로컬 저장소에만 저장" },
+        { "area": "API 기반", "stage_level": 2, "stage_label": "부분 구현", "gap": "운영 핵심 엔티티와 일반 일정 API 부족" },
+        { "area": "웹–API 연결", "stage_level": 0, "stage_label": "미착수", "gap": "코치 웹의 실제 API 호출 없음" },
+        { "area": "스쿼드·참가자", "stage_level": 1, "stage_label": "기획/프리뷰", "gap": "정책은 있으나 데이터 모델 없음" },
+        { "area": "스태프·공지 운영", "stage_level": 1, "stage_label": "기획/프리뷰", "gap": "권한·대상·읽음 상태 미연결" },
+        { "area": "코치 모바일", "stage_level": 1, "stage_label": "기획/프리뷰", "gap": "API 미연동과 정적 분석 실패" }
+      ],
+      "current_status": [
+        { "order": 1, "area": "코치 웹 경험", "working": "대시보드, 일정, 세션 상세, 선수단, 상태, 피드백, 경기, 공지, 설정 화면", "gap": "대부분 프리뷰 데이터이며 핵심 버튼 다수가 실제 저장·발송과 연결되지 않음", "stage": "강한 프로토타입" },
+        { "order": 2, "area": "일정·훈련 편집", "working": "월·주 보기, 일정 CRUD, 훈련 블록, 템플릿, 선수별 입력", "gap": "브라우저 로컬 저장소에만 남고 다른 지도자·기기와 공유되지 않음", "stage": "로컬 데모" },
+        { "order": 3, "area": "API 기반", "working": "마이크로사이클, 세션, 블록, 검토, 이슈·목표, GPS 가져오기, 공개본, 감사 이력", "gap": "일반 일정 CRUD와 팀 운영 핵심 엔티티가 부족함", "stage": "부분 구현·검증됨" },
+        { "order": 4, "area": "웹–API 연결", "working": "API 주소 설정과 OpenAPI 계약 존재", "gap": "코치 웹에서 API를 호출하는 실제 사용 코드가 없음", "stage": "미착수" },
+        { "order": 5, "area": "스쿼드·참가자", "working": "정책과 화면 개념은 상세히 정의됨", "gap": "공식 스쿼드, 소속 이력, 운영 그룹, 일정 대상, 실제 참가자 모델이 없음", "stage": "기획 완료·구현 전" },
+        { "order": 6, "area": "스태프·공지 운영", "working": "검토 큐, 역할별 공지와 확인율 UX 존재", "gap": "공지 작성·대상 계산·읽음 상태·권한 관리가 실제 데이터로 이어지지 않음", "stage": "프리뷰" },
+        { "order": 7, "area": "코치 모바일", "working": "홈, 일정, 출석, 선수단, 관리 프리뷰와 위젯 테스트", "gap": "API 미연동, 동작 없는 버튼 다수, 정적 분석 실패", "stage": "보류가 필요한 프리뷰" }
+      ],
+      "ia_reframe": [
+        { "order": 1, "new_area": "오늘", "job": "결정 대기, 예외 선수, 오늘 세션, 누락·후속 작업을 한 번에 처리", "absorbs": "대시보드, 알림, 스쿼드 상태 요약" },
+        { "order": 2, "new_area": "일정·세션", "job": "주간 계획, 훈련·경기, 참가자, GPS·RPE, 메모와 종료를 한 흐름으로 관리", "absorbs": "일정, 경기 기록, 퍼포먼스" },
+        { "order": 3, "new_area": "선수단", "job": "소속·운영 그룹·가용성·제한·개인 기록을 관리", "absorbs": "선수단, 스쿼드 상태, 선수별 피드백" },
+        { "order": 4, "new_area": "스태프", "job": "담당 배정, 제안·결정, 내부 공지와 후속 작업을 관리", "absorbs": "스태프 검토, 지도자 공지, 권한 일부" },
+        { "order": 5, "new_area": "팀 운영", "job": "시즌·스쿼드·권한·공지·데이터 연결·감사 이력을 관리", "absorbs": "설정, 공지, 가져오기 관리" }
+      ],
+      "operating_loop": [
+        { "order": 1, "step": "1. 팀 기반 설정", "coach_outcome": "팀·시즌·공식 스쿼드·스태프 역할과 선수단이 준비됨", "completion": "실제 계정·권한으로 팀에 접속하고 담당 범위만 보임" },
+        { "order": 2, "step": "2. 주간 계획", "coach_outcome": "다음 경기 기준으로 세션·훈련 블록·담당자를 계획", "completion": "서버에 저장되고 다른 스태프가 같은 계획을 봄" },
+        { "order": 3, "step": "3. 대상·가용성", "coach_outcome": "스쿼드·운영 그룹·개인 규칙으로 예상 대상을 만들고 제한 선수를 확인", "completion": "대상 인원과 제외 이유가 계산되고 변경 이력이 남음" },
+        { "order": 4, "step": "4. 현장 실행", "coach_outcome": "실제 참가, 참여 방식, 현장 변경과 예외를 빠르게 확정", "completion": "모바일 또는 반응형 웹에서 3분 안에 참가자 확정" },
+        { "order": 5, "step": "5. 세션 종료", "coach_outcome": "RPE·GPS·코치 메모·선수 이슈를 연결하고 세션을 닫음", "completion": "누락이 보이고 완료 상태가 다음 날 대시보드에 반영" },
+        { "order": 6, "step": "6. 다음 계획 반영", "coach_outcome": "스태프 제안과 데이터를 보고 유지·수정·보류 결정", "completion": "결정과 근거가 다음 세션·마이크로사이클에 연결" }
+      ],
+      "roadmap": [
+        { "order": 1, "period": "1–2주", "theme": "운영 데이터 기반", "scope": "팀·시즌·스쿼드·운영 그룹·스태프 권한·선수 소속·웹 API 클라이언트", "exit": "프리뷰 데이터 없이 로그인한 역할이 실제 팀·선수단을 조회" },
+        { "order": 2, "period": "3–5주", "theme": "계획에서 현장까지", "scope": "일정 CRUD, 대상 규칙, 예상 인원, 실제 참가자, 세션 블록, 제한 정보, 반응형 세션 운영", "exit": "두 지도자가 같은 주간 계획을 공유하고 현장에서 참가자를 확정" },
+        { "order": 3, "period": "6–8주", "theme": "세션 종료와 파일럿", "scope": "RPE·GPS 연결, 코치 회고, 선수 이슈, 스태프 결정, 내부 공지, 감사 이력, 운영 지표", "exit": "한 팀이 2주 이상 연속으로 세션 운영 루프를 완료" }
+      ],
+      "success_metrics": [
+        { "order": 1, "metric": "세션 운영 완료율", "definition": "실제 참가자 확정 + 종료 24시간 내 실행 기록이 있는 세션 / 예정 세션", "pilot_target": "4주차 80% 이상" },
+        { "order": 2, "metric": "팀 활성화 시간", "definition": "팀 생성부터 스태프·선수단·첫 세션 준비 완료까지", "pilot_target": "60분 이내" },
+        { "order": 3, "metric": "세션 준비 시간", "definition": "템플릿 선택부터 대상·블록·담당 확정까지", "pilot_target": "10분 이내" },
+        { "order": 4, "metric": "현장 참가자 확정 시간", "definition": "세션 시작 전후 실제 참가·제한을 확정하는 시간", "pilot_target": "3분 이내" },
+        { "order": 5, "metric": "다음 날 데이터 완성도", "definition": "참가자 중 요구된 RPE·GPS·코치 기록이 준비된 비율", "pilot_target": "90% 이상" },
+        { "order": 6, "metric": "파일럿 지속 사용", "definition": "팀이 주간 세션의 대부분을 BASE11에서 연속 운영한 기간", "pilot_target": "3개 팀 중 2개 팀이 4주 연속" }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "readiness_query",
+      "label": "구현 준비도 판정",
+      "path": "source-notes.md",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "executed_at": "2026-08-22T22:30:00+10:00",
+        "description": "코드·화면 감사에서 확정한 4단계 구현 판정 행을 차트 데이터로 재현합니다.",
+        "metric_definitions": [
+          "stage_level: 0 미착수, 1 기획·프리뷰, 2 부분 구현, 3 운영 가능의 서열형 판정이며 백분율 진척도가 아닙니다."
+        ],
+        "sql": "WITH readiness(area, stage_level, stage_label, gap) AS (VALUES ('코치 웹 경험',2,'부분 구현','프리뷰 데이터와 실제 저장·발송 미연결'),('일정·훈련 편집',2,'부분 구현','브라우저 로컬 저장소에만 저장'),('API 기반',2,'부분 구현','운영 핵심 엔티티와 일반 일정 API 부족'),('웹–API 연결',0,'미착수','코치 웹의 실제 API 호출 없음'),('스쿼드·참가자',1,'기획/프리뷰','정책은 있으나 데이터 모델 없음'),('스태프·공지 운영',1,'기획/프리뷰','권한·대상·읽음 상태 미연결'),('코치 모바일',1,'기획/프리뷰','API 미연동과 정적 분석 실패')) SELECT area, stage_level, stage_label, gap FROM readiness"
+      }
+    },
+    {
+      "id": "current_status_query",
+      "label": "현재 구현 상태 감사",
+      "path": "source-notes.md",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "executed_at": "2026-08-22T22:30:00+10:00",
+        "description": "저장소·로컬 화면·자동 검증에서 확인한 영역별 구현 상태를 재현합니다.",
+        "sql": "WITH status_rows(\"order\",area,working,gap,stage) AS (VALUES (1,'코치 웹 경험','대시보드, 일정, 세션 상세, 선수단, 상태, 피드백, 경기, 공지, 설정 화면','대부분 프리뷰 데이터이며 핵심 버튼 다수가 실제 저장·발송과 연결되지 않음','강한 프로토타입'),(2,'일정·훈련 편집','월·주 보기, 일정 CRUD, 훈련 블록, 템플릿, 선수별 입력','브라우저 로컬 저장소에만 남고 다른 지도자·기기와 공유되지 않음','로컬 데모'),(3,'API 기반','마이크로사이클, 세션, 블록, 검토, 이슈·목표, GPS 가져오기, 공개본, 감사 이력','일반 일정 CRUD와 팀 운영 핵심 엔티티가 부족함','부분 구현·검증됨'),(4,'웹–API 연결','API 주소 설정과 OpenAPI 계약 존재','코치 웹에서 API를 호출하는 실제 사용 코드가 없음','미착수'),(5,'스쿼드·참가자','정책과 화면 개념은 상세히 정의됨','공식 스쿼드, 소속 이력, 운영 그룹, 일정 대상, 실제 참가자 모델이 없음','기획 완료·구현 전'),(6,'스태프·공지 운영','검토 큐, 역할별 공지와 확인율 UX 존재','공지 작성·대상 계산·읽음 상태·권한 관리가 실제 데이터로 이어지지 않음','프리뷰'),(7,'코치 모바일','홈, 일정, 출석, 선수단, 관리 프리뷰와 위젯 테스트','API 미연동, 동작 없는 버튼 다수, 정적 분석 실패','보류가 필요한 프리뷰')) SELECT \"order\",area,working,gap,stage FROM status_rows ORDER BY \"order\""
+      }
+    },
+    {
+      "id": "ia_reframe_query",
+      "label": "지도자 중심 정보 구조 권고",
+      "path": "source-notes.md",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "executed_at": "2026-08-22T22:30:00+10:00",
+        "description": "현 정보 구조를 지도자의 책임과 업무 순서로 재구성한 권고안을 재현합니다.",
+        "sql": "WITH ia_rows(\"order\",new_area,job,absorbs) AS (VALUES (1,'오늘','결정 대기, 예외 선수, 오늘 세션, 누락·후속 작업을 한 번에 처리','대시보드, 알림, 스쿼드 상태 요약'),(2,'일정·세션','주간 계획, 훈련·경기, 참가자, GPS·RPE, 메모와 종료를 한 흐름으로 관리','일정, 경기 기록, 퍼포먼스'),(3,'선수단','소속·운영 그룹·가용성·제한·개인 기록을 관리','선수단, 스쿼드 상태, 선수별 피드백'),(4,'스태프','담당 배정, 제안·결정, 내부 공지와 후속 작업을 관리','스태프 검토, 지도자 공지, 권한 일부'),(5,'팀 운영','시즌·스쿼드·권한·공지·데이터 연결·감사 이력을 관리','설정, 공지, 가져오기 관리')) SELECT \"order\",new_area,job,absorbs FROM ia_rows ORDER BY \"order\""
+      }
+    },
+    {
+      "id": "operating_loop_query",
+      "label": "P0 지도자 운영 루프 권고",
+      "path": "source-notes.md",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "executed_at": "2026-08-22T22:30:00+10:00",
+        "description": "지도자와 팀 매니저가 한 주의 훈련을 끝내는 P0 운영 단계를 재현합니다.",
+        "sql": "WITH loop_rows(\"order\",step,coach_outcome,completion) AS (VALUES (1,'1. 팀 기반 설정','팀·시즌·공식 스쿼드·스태프 역할과 선수단이 준비됨','실제 계정·권한으로 팀에 접속하고 담당 범위만 보임'),(2,'2. 주간 계획','다음 경기 기준으로 세션·훈련 블록·담당자를 계획','서버에 저장되고 다른 스태프가 같은 계획을 봄'),(3,'3. 대상·가용성','스쿼드·운영 그룹·개인 규칙으로 예상 대상을 만들고 제한 선수를 확인','대상 인원과 제외 이유가 계산되고 변경 이력이 남음'),(4,'4. 현장 실행','실제 참가, 참여 방식, 현장 변경과 예외를 빠르게 확정','모바일 또는 반응형 웹에서 3분 안에 참가자 확정'),(5,'5. 세션 종료','RPE·GPS·코치 메모·선수 이슈를 연결하고 세션을 닫음','누락이 보이고 완료 상태가 다음 날 대시보드에 반영'),(6,'6. 다음 계획 반영','스태프 제안과 데이터를 보고 유지·수정·보류 결정','결정과 근거가 다음 세션·마이크로사이클에 연결')) SELECT \"order\",step,coach_outcome,completion FROM loop_rows ORDER BY \"order\""
+      }
+    },
+    {
+      "id": "roadmap_query",
+      "label": "8주 실행 순서 권고",
+      "path": "source-notes.md",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "executed_at": "2026-08-22T22:30:00+10:00",
+        "description": "지도자 운영 루프를 실제 데이터로 닫기 위한 8주 권고 순서를 재현합니다.",
+        "sql": "WITH roadmap_rows(\"order\",period,theme,scope,exit) AS (VALUES (1,'1–2주','운영 데이터 기반','팀·시즌·스쿼드·운영 그룹·스태프 권한·선수 소속·웹 API 클라이언트','프리뷰 데이터 없이 로그인한 역할이 실제 팀·선수단을 조회'),(2,'3–5주','계획에서 현장까지','일정 CRUD, 대상 규칙, 예상 인원, 실제 참가자, 세션 블록, 제한 정보, 반응형 세션 운영','두 지도자가 같은 주간 계획을 공유하고 현장에서 참가자를 확정'),(3,'6–8주','세션 종료와 파일럿','RPE·GPS 연결, 코치 회고, 선수 이슈, 스태프 결정, 내부 공지, 감사 이력, 운영 지표','한 팀이 2주 이상 연속으로 세션 운영 루프를 완료')) SELECT \"order\",period,theme,scope,exit FROM roadmap_rows ORDER BY \"order\""
+      }
+    },
+    {
+      "id": "success_metrics_query",
+      "label": "파일럿 성공 지표 권고",
+      "path": "source-notes.md",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "executed_at": "2026-08-22T22:30:00+10:00",
+        "description": "지도자 운영 루프 채택을 검증하기 위한 파일럿 목표를 재현합니다.",
+        "sql": "WITH metric_rows(\"order\",metric,definition,pilot_target) AS (VALUES (1,'세션 운영 완료율','실제 참가자 확정 + 종료 24시간 내 실행 기록이 있는 세션 / 예정 세션','4주차 80% 이상'),(2,'팀 활성화 시간','팀 생성부터 스태프·선수단·첫 세션 준비 완료까지','60분 이내'),(3,'세션 준비 시간','템플릿 선택부터 대상·블록·담당 확정까지','10분 이내'),(4,'현장 참가자 확정 시간','세션 시작 전후 실제 참가·제한을 확정하는 시간','3분 이내'),(5,'다음 날 데이터 완성도','참가자 중 요구된 RPE·GPS·코치 기록이 준비된 비율','90% 이상'),(6,'파일럿 지속 사용','팀이 주간 세션의 대부분을 BASE11에서 연속 운영한 기간','3개 팀 중 2개 팀이 4주 연속')) SELECT \"order\",metric,definition,pilot_target FROM metric_rows ORDER BY \"order\""
+      }
+    }
+  ]
+}

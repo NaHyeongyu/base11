@@ -95,6 +95,71 @@ TABLE_COLUMNS: dict[str, Sequence[str]] = {
         "squad_number",
         "active",
     ),
+    "player_readiness_entries": (
+        "id",
+        "team_id",
+        "player_membership_id",
+        "recorded_on",
+        "condition_score",
+        "pain_score",
+        "pain_area",
+        "note",
+        "source_kind",
+        "source_ref",
+        "recorded_by_id",
+        "created_at",
+    ),
+    "player_availability_decisions": (
+        "id",
+        "team_id",
+        "player_membership_id",
+        "status",
+        "availability",
+        "restriction",
+        "review_at",
+        "effective_from",
+        "effective_until",
+        "source_kind",
+        "source_ref",
+        "created_by_id",
+        "supersedes_id",
+        "version",
+        "is_current",
+        "created_at",
+        "updated_at",
+    ),
+    "injury_cases": (
+        "id",
+        "team_id",
+        "player_membership_id",
+        "status",
+        "stage",
+        "body_area",
+        "occurred_on",
+        "diagnosis_confirmed",
+        "operational_summary",
+        "internal_note",
+        "owner_membership_id",
+        "review_at",
+        "version",
+        "closed_at",
+        "created_by_id",
+        "created_at",
+        "updated_at",
+    ),
+    "player_health_changes": (
+        "id",
+        "team_id",
+        "player_membership_id",
+        "actor_user_id",
+        "entity_type",
+        "entity_id",
+        "action",
+        "before_value",
+        "after_value",
+        "source",
+        "created_at",
+    ),
     "matches": (
         "id",
         "team_id",
@@ -300,6 +365,159 @@ def build_dataset(year: int = 2026) -> Dataset:
                 True,
             )
         )
+
+    wellbeing_day = date(year, 8, 28)
+    wellbeing_recorded_at = at(wellbeing_day, 8)
+    for membership_id, squad_number, _name, _position, _grade in players:
+        if squad_number == 4:
+            condition, pain, pain_area = 5, 3, "오른쪽 발목"
+            health_status, availability, injury_stage = "monitor", "limited", "pain_observation"
+            restriction = "최대 60분 · 급격한 방향 전환 제한"
+            source_kind = "wellbeing"
+        elif squad_number == 20:
+            condition, pain, pain_area = 5, 2, "왼쪽 햄스트링"
+            health_status, availability, injury_stage = "rehab", "unavailable", "rehab"
+            restriction = "팀 러닝 제외 · 패스와 전술 설명만 참여"
+            source_kind = "medical"
+        elif squad_number == 19:
+            condition, pain, pain_area = 7, 0, None
+            health_status, availability, injury_stage = "monitor", "limited", "none"
+            restriction = "고강도 반복 수 20% 제한"
+            source_kind = "training"
+        else:
+            condition, pain, pain_area = 7 + squad_number % 3, 0, None
+            health_status, availability, injury_stage = "normal", "full", "none"
+            restriction = "제한 없음"
+            source_kind = "wellbeing"
+
+        readiness_id = stable_id(f"{year}:readiness:{membership_id}:{wellbeing_day}")
+        availability_id = stable_id(f"{year}:availability:{membership_id}:{wellbeing_day}")
+        review_at = (
+            at(wellbeing_day + timedelta(days=1), 9) if health_status != "normal" else None
+        )
+        rows["player_readiness_entries"].append(
+            (
+                readiness_id,
+                TEAM_ID,
+                membership_id,
+                wellbeing_day,
+                condition,
+                pain,
+                pain_area,
+                "아침 체크 완료",
+                source_kind,
+                f"preview-{squad_number}",
+                HEAD_COACH_USER_ID,
+                wellbeing_recorded_at,
+            )
+        )
+        rows["player_availability_decisions"].append(
+            (
+                availability_id,
+                TEAM_ID,
+                membership_id,
+                health_status,
+                availability,
+                restriction,
+                review_at,
+                wellbeing_recorded_at,
+                None,
+                source_kind,
+                f"preview-{squad_number}",
+                HEAD_COACH_USER_ID,
+                None,
+                1,
+                True,
+                wellbeing_recorded_at,
+                wellbeing_recorded_at,
+            )
+        )
+        rows["player_health_changes"].extend(
+            [
+                (
+                    stable_id(f"{year}:health-change:readiness:{membership_id}"),
+                    TEAM_ID,
+                    membership_id,
+                    HEAD_COACH_USER_ID,
+                    "readiness",
+                    readiness_id,
+                    "recorded",
+                    None,
+                    {
+                        "condition_score": condition,
+                        "pain_score": pain,
+                        "pain_area": pain_area,
+                        "recorded_on": wellbeing_day.isoformat(),
+                    },
+                    source_kind,
+                    wellbeing_recorded_at,
+                ),
+                (
+                    stable_id(f"{year}:health-change:availability:{membership_id}"),
+                    TEAM_ID,
+                    membership_id,
+                    HEAD_COACH_USER_ID,
+                    "availability",
+                    availability_id,
+                    "created",
+                    None,
+                    {
+                        "status": health_status,
+                        "availability": availability,
+                        "restriction": restriction,
+                        "review_at": review_at.isoformat() if review_at else None,
+                        "version": 1,
+                    },
+                    source_kind,
+                    wellbeing_recorded_at,
+                ),
+            ]
+        )
+        if injury_stage != "none":
+            injury_id = stable_id(f"{year}:injury:{membership_id}:{wellbeing_day}")
+            rows["injury_cases"].append(
+                (
+                    injury_id,
+                    TEAM_ID,
+                    membership_id,
+                    "open",
+                    injury_stage,
+                    pain_area,
+                    wellbeing_day,
+                    False,
+                    restriction,
+                    "지도자 화면에는 운영에 필요한 정보만 표시",
+                    MEDICAL_MEMBERSHIP_ID,
+                    review_at,
+                    1,
+                    None,
+                    MEDICAL_USER_ID,
+                    wellbeing_recorded_at,
+                    wellbeing_recorded_at,
+                )
+            )
+            rows["player_health_changes"].append(
+                (
+                    stable_id(f"{year}:health-change:injury:{membership_id}"),
+                    TEAM_ID,
+                    membership_id,
+                    MEDICAL_USER_ID,
+                    "injury_case",
+                    injury_id,
+                    "opened",
+                    None,
+                    {
+                        "status": "open",
+                        "stage": injury_stage,
+                        "body_area": pain_area,
+                        "operational_summary": restriction,
+                        "review_at": review_at.isoformat() if review_at else None,
+                        "version": 1,
+                    },
+                    source_kind,
+                    wellbeing_recorded_at,
+                )
+            )
 
     first_monday = date(year, 1, 1)
     first_monday += timedelta(days=(7 - first_monday.weekday()) % 7)

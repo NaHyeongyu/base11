@@ -9,7 +9,10 @@ from clubhaus.modules.coaching.application.performance import (
     import_status,
     requested_player_ids,
 )
-from clubhaus.modules.coaching.application.publications import build_publication_payloads
+from clubhaus.modules.coaching.application.publications import (
+    build_parent_player_payload,
+    build_publication_payloads,
+)
 from clubhaus.modules.coaching.application.sessions import (
     StaleSessionVersionError,
     block_owner_ids,
@@ -60,8 +63,55 @@ def test_publication_payloads_keep_internal_notes_staff_only() -> None:
     assert list(payloads) == ["player", "staff", "parent"]
     assert "internal_notes" not in payloads["player"]
     assert "internal_notes" not in payloads["parent"]
+    assert payloads["parent"]["access_scope"] == "linked_child_only"
+    assert payloads["parent"]["visible_sections"] == [
+        "child_training",
+        "child_match",
+        "published_feedback",
+    ]
     assert payloads["staff"]["internal_notes"] == "선수에게 숨겨야 하는 메모"
     assert payloads["staff"]["blocks"] == ["전환 게임"]
+
+
+def test_parent_player_payload_is_child_scoped_and_allowlisted() -> None:
+    player_id = UUID("88888888-8888-4888-8888-888888888888")
+    payload = build_parent_player_payload(
+        player_membership_id=player_id,
+        session_type="match",
+        metrics={
+            "minutes": 72,
+            "rating": 8.1,
+            "total_distance_m": 8450,
+            "internal_notes": "학부모에게 보이면 안 되는 메모",
+            "team_tactics": "4-3-3 압박 트리거",
+            "other_players": ["선수 A", "선수 B"],
+        },
+        feedback="전환 뒤 첫 움직임이 좋았습니다.",
+        feedback_visible=True,
+    )
+
+    assert payload == {
+        "access_scope": "linked_child_only",
+        "player_membership_id": str(player_id),
+        "session_type": "match",
+        "metrics": {"minutes": 72, "rating": 8.1, "total_distance_m": 8450},
+        "feedback": "전환 뒤 첫 움직임이 좋았습니다.",
+    }
+    assert "internal_notes" not in payload["metrics"]
+    assert "team_tactics" not in payload["metrics"]
+    assert "other_players" not in payload["metrics"]
+
+
+def test_parent_player_payload_hides_unpublished_feedback() -> None:
+    payload = build_parent_player_payload(
+        player_membership_id=UUID("77777777-7777-4777-8777-777777777777"),
+        session_type="training",
+        metrics={"condition": 8, "rpe": 6},
+        feedback="지도자 검토 중",
+        feedback_visible=False,
+    )
+
+    assert payload["feedback"] is None
 
 
 def test_performance_import_rules_detect_duplicates_and_status() -> None:

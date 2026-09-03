@@ -42,8 +42,9 @@ def test_coaching_router_only_composes_feature_routers() -> None:
         "clubhaus.modules.coaching.api.planning",
         "clubhaus.modules.coaching.api.player_development",
         "clubhaus.modules.coaching.api.publications",
-        "clubhaus.modules.coaching.api.staff_reviews",
-    }
+            "clubhaus.modules.coaching.api.staff_reviews",
+            "clubhaus.modules.coaching.api.wellbeing",
+        }
 
 
 def test_coaching_application_is_framework_free() -> None:

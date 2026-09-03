@@ -9,6 +9,12 @@ from clubhaus.main import app
 from clubhaus.modules.coaching.infrastructure.models.audit import ChangeLogModel
 from clubhaus.modules.coaching.infrastructure.models.performance import PerformanceMetricModel
 from clubhaus.modules.coaching.infrastructure.models.publications import PublicationModel
+from clubhaus.modules.coaching.infrastructure.models.wellbeing import (
+    InjuryCaseModel,
+    PlayerAvailabilityDecisionModel,
+    PlayerHealthChangeModel,
+    PlayerReadinessModel,
+)
 from conftest import PLAYER_MEMBERSHIP_ID, PLAYER_USER_ID, REVIEW_ID, SESSION_ID, TEAM_ID
 
 
@@ -169,3 +175,82 @@ def test_import_rejects_duplicate_player_rows(client: TestClient) -> None:
 
     assert response.status_code == 422
     assert response.json()["detail"] == "Each player may appear only once per import"
+
+
+def test_wellbeing_update_is_versioned_and_audited(
+    client: TestClient, db_session: Session
+) -> None:
+    overview = client.get(f"/api/v1/teams/{TEAM_ID}/wellbeing")
+    assert overview.status_code == 200
+    assert overview.json()["summary"]["players_total"] == 1
+    assert overview.json()["summary"]["attention"] == 1
+
+    response = client.post(
+        f"/api/v1/teams/{TEAM_ID}/players/{PLAYER_MEMBERSHIP_ID}/wellbeing-updates",
+        json={
+            "condition_score": 5,
+            "pain_score": 3,
+            "pain_area": "오른쪽 발목",
+            "status": "monitor",
+            "availability": "limited",
+            "injury_stage": "pain_observation",
+            "restriction": "최대 60분 · 방향 전환 제한",
+            "review_at": "2026-08-29T09:00:00+09:00",
+            "note": "훈련 후 재확인",
+            "source_kind": "wellbeing",
+        },
+    )
+    assert response.status_code == 201
+    body = response.json()
+    assert body["player"]["availability"]["version"] == 1
+    assert body["player"]["active_injury"]["stage"] == "pain_observation"
+    assert len(body["changes"]) == 3
+    assert db_session.scalar(select(func.count()).select_from(PlayerReadinessModel)) == 1
+    assert (
+        db_session.scalar(select(func.count()).select_from(PlayerAvailabilityDecisionModel))
+        == 1
+    )
+    assert db_session.scalar(select(func.count()).select_from(InjuryCaseModel)) == 1
+    assert db_session.scalar(select(func.count()).select_from(PlayerHealthChangeModel)) == 3
+
+    recovered = client.post(
+        f"/api/v1/teams/{TEAM_ID}/players/{PLAYER_MEMBERSHIP_ID}/wellbeing-updates",
+        json={
+            "condition_score": 8,
+            "pain_score": 0,
+            "pain_area": None,
+            "status": "normal",
+            "availability": "full",
+            "injury_stage": "none",
+            "restriction": "제한 없음",
+            "review_at": None,
+            "source_kind": "medical",
+        },
+    )
+    assert recovered.status_code == 201
+    assert recovered.json()["player"]["availability"]["version"] == 2
+    assert recovered.json()["player"]["active_injury"]["status"] == "closed"
+    current_decisions = db_session.scalars(
+        select(PlayerAvailabilityDecisionModel).where(
+            PlayerAvailabilityDecisionModel.is_current.is_(True)
+        )
+    ).all()
+    assert len(current_decisions) == 1
+    assert current_decisions[0].status == "normal"
+
+
+def test_wellbeing_rejects_inconsistent_state(client: TestClient) -> None:
+    response = client.post(
+        f"/api/v1/teams/{TEAM_ID}/players/{PLAYER_MEMBERSHIP_ID}/wellbeing-updates",
+        json={
+            "condition_score": 5,
+            "pain_score": 3,
+            "pain_area": "오른쪽 발목",
+            "status": "normal",
+            "availability": "limited",
+            "injury_stage": "pain_observation",
+            "restriction": "최대 60분",
+            "source_kind": "wellbeing",
+        },
+    )
+    assert response.status_code == 422

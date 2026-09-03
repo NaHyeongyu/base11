@@ -1,0 +1,34 @@
+{
+  "runId": "base11-simple-coach-ux-2026-08-23",
+  "phase": "phase3",
+  "step": "simple-sidebar",
+  "entities": {
+    "page": {
+      "coachPc": "431:1738"
+    },
+    "sections": {
+      "localComponents": "435:5"
+    },
+    "sourceComponents": {
+      "sidebar": "436:2",
+      "primaryButton": "437:2",
+      "pageHeader": "439:162"
+    },
+    "components": {
+      "simpleSidebar": "486:422",
+      "simpleSidebarToday": "486:362",
+      "simpleSidebarPlayers": "486:382",
+      "simpleSidebarSchedule": "486:402"
+    },
+    "screens": {}
+  },
+  "pendingValidations": [
+    "simple-ux-section:screenshot"
+  ],
+  "completedSteps": [
+    "phase0",
+    "phase1",
+    "phase2",
+    "simple-sidebar"
+  ]
+}

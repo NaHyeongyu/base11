@@ -5,7 +5,7 @@ import { Icon } from "@/shared/ui/icon";
 
 export function MissionsView() {
   return <>
-    <PageHeader eyebrow="PLAYER DEVELOPMENT" title="선수 목표" description="세션마다 바뀌는 숙제가 아니라 기준값, 목표값, 측정 근거와 리뷰 주기가 있는 성장 목표를 관리합니다." action={<ActionButton>목표 만들기</ActionButton>} />
+    <PageHeader eyebrow="선수 성장 관리" title="선수 목표" description="목표와 측정 기준, 확인할 날짜를 정하고 훈련·경기 기록과 함께 관리합니다." action={<ActionButton>목표 만들기</ActionButton>} />
     <div className="metric-grid four compact">
       <MetricCard label="활성 목표" value="24개" helper="팀 목표 1 · 개인 목표 23" tone="blue" />
       <MetricCard label="평균 진척" value="68%" helper="실제 세션 근거 기준" tone="green" />

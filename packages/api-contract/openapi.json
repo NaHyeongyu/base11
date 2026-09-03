@@ -852,10 +852,260 @@
           }
         }
       }
+    },
+    "/api/v1/teams/{team_id}/wellbeing": {
+      "get": {
+        "tags": [
+          "wellbeing"
+        ],
+        "summary": "Get Wellbeing Overview",
+        "operationId": "get_wellbeing_overview_api_v1_teams__team_id__wellbeing_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WellbeingOverviewResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teams/{team_id}/wellbeing-changes": {
+      "get": {
+        "tags": [
+          "wellbeing"
+        ],
+        "summary": "List Wellbeing Changes",
+        "operationId": "list_wellbeing_changes_api_v1_teams__team_id__wellbeing_changes_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HealthChangeResponse"
+                  },
+                  "title": "Response List Wellbeing Changes Api V1 Teams  Team Id  Wellbeing Changes Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teams/{team_id}/players/{player_membership_id}/wellbeing-updates": {
+      "post": {
+        "tags": [
+          "wellbeing"
+        ],
+        "summary": "Create Wellbeing Update",
+        "operationId": "create_wellbeing_update_api_v1_teams__team_id__players__player_membership_id__wellbeing_updates_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Team Id"
+            }
+          },
+          {
+            "name": "player_membership_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Player Membership Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WellbeingUpdateCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WellbeingUpdateResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AvailabilityResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "availability": {
+            "type": "string",
+            "title": "Availability"
+          },
+          "restriction": {
+            "type": "string",
+            "title": "Restriction"
+          },
+          "review_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Review At"
+          },
+          "effective_from": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Effective From"
+          },
+          "source_kind": {
+            "type": "string",
+            "title": "Source Kind"
+          },
+          "source_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Ref"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "availability",
+          "restriction",
+          "review_at",
+          "effective_from",
+          "source_kind",
+          "source_ref",
+          "version"
+        ],
+        "title": "AvailabilityResponse"
+      },
       "DashboardCounts": {
         "properties": {
           "open_issues": {
@@ -942,6 +1192,78 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "HealthChangeResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "player_membership_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Player Membership Id"
+          },
+          "actor_user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Actor User Id"
+          },
+          "entity_type": {
+            "type": "string",
+            "title": "Entity Type"
+          },
+          "entity_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Entity Id"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "before_value": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before Value"
+          },
+          "after_value": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "After Value"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "player_membership_id",
+          "actor_user_id",
+          "entity_type",
+          "entity_id",
+          "action",
+          "before_value",
+          "after_value",
+          "source",
+          "created_at"
+        ],
+        "title": "HealthChangeResponse"
+      },
       "HealthResponse": {
         "properties": {
           "status": {
@@ -960,6 +1282,95 @@
           "service"
         ],
         "title": "HealthResponse"
+      },
+      "InjuryCaseResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "stage": {
+            "type": "string",
+            "title": "Stage"
+          },
+          "body_area": {
+            "type": "string",
+            "title": "Body Area"
+          },
+          "occurred_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Occurred On"
+          },
+          "diagnosis_confirmed": {
+            "type": "boolean",
+            "title": "Diagnosis Confirmed"
+          },
+          "operational_summary": {
+            "type": "string",
+            "title": "Operational Summary"
+          },
+          "owner_membership_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Membership Id"
+          },
+          "review_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Review At"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "closed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Closed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "stage",
+          "body_area",
+          "occurred_on",
+          "diagnosis_confirmed",
+          "operational_summary",
+          "owner_membership_id",
+          "review_at",
+          "version",
+          "closed_at"
+        ],
+        "title": "InjuryCaseResponse"
       },
       "MatchResponse": {
         "properties": {
@@ -1594,6 +2005,94 @@
         ],
         "title": "PlayerIssueResponse"
       },
+      "PlayerWellbeingResponse": {
+        "properties": {
+          "player_membership_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Player Membership Id"
+          },
+          "player_name": {
+            "type": "string",
+            "title": "Player Name"
+          },
+          "squad_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Squad Number"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "grade": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grade"
+          },
+          "readiness": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReadinessResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "availability": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AvailabilityResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "active_injury": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InjuryCaseResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "player_membership_id",
+          "player_name",
+          "squad_number",
+          "position",
+          "grade",
+          "readiness",
+          "availability",
+          "active_injury"
+        ],
+        "title": "PlayerWellbeingResponse"
+      },
       "PublicationResponse": {
         "properties": {
           "session_id": {
@@ -1631,6 +2130,83 @@
           "published_at"
         ],
         "title": "PublicationResponse"
+      },
+      "ReadinessResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "recorded_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Recorded On"
+          },
+          "condition_score": {
+            "type": "integer",
+            "title": "Condition Score"
+          },
+          "pain_score": {
+            "type": "integer",
+            "title": "Pain Score"
+          },
+          "pain_area": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pain Area"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "source_kind": {
+            "type": "string",
+            "title": "Source Kind"
+          },
+          "source_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Ref"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "recorded_on",
+          "condition_score",
+          "pain_score",
+          "pain_area",
+          "note",
+          "source_kind",
+          "source_ref",
+          "created_at"
+        ],
+        "title": "ReadinessResponse"
       },
       "SessionBlockInput": {
         "properties": {
@@ -2262,6 +2838,214 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "WellbeingOverviewResponse": {
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/WellbeingSummaryResponse"
+          },
+          "players": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerWellbeingResponse"
+            },
+            "type": "array",
+            "title": "Players"
+          }
+        },
+        "type": "object",
+        "required": [
+          "summary",
+          "players"
+        ],
+        "title": "WellbeingOverviewResponse"
+      },
+      "WellbeingSummaryResponse": {
+        "properties": {
+          "players_total": {
+            "type": "integer",
+            "title": "Players Total"
+          },
+          "attention": {
+            "type": "integer",
+            "title": "Attention"
+          },
+          "limited": {
+            "type": "integer",
+            "title": "Limited"
+          },
+          "unavailable": {
+            "type": "integer",
+            "title": "Unavailable"
+          },
+          "checked_today": {
+            "type": "integer",
+            "title": "Checked Today"
+          },
+          "average_condition": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Average Condition"
+          }
+        },
+        "type": "object",
+        "required": [
+          "players_total",
+          "attention",
+          "limited",
+          "unavailable",
+          "checked_today",
+          "average_condition"
+        ],
+        "title": "WellbeingSummaryResponse"
+      },
+      "WellbeingUpdateCreate": {
+        "properties": {
+          "condition_score": {
+            "type": "integer",
+            "maximum": 10.0,
+            "minimum": 0.0,
+            "title": "Condition Score"
+          },
+          "pain_score": {
+            "type": "integer",
+            "maximum": 10.0,
+            "minimum": 0.0,
+            "title": "Pain Score"
+          },
+          "pain_area": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pain Area"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "monitor",
+              "limited",
+              "rehab"
+            ],
+            "title": "Status"
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "full",
+              "limited",
+              "unavailable"
+            ],
+            "title": "Availability"
+          },
+          "injury_stage": {
+            "type": "string",
+            "enum": [
+              "none",
+              "pain_observation",
+              "treatment",
+              "rehab",
+              "return_review",
+              "returned"
+            ],
+            "title": "Injury Stage",
+            "default": "none"
+          },
+          "restriction": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Restriction"
+          },
+          "review_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Review At"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "source_kind": {
+            "type": "string",
+            "enum": [
+              "wellbeing",
+              "player_detail",
+              "training",
+              "match",
+              "medical"
+            ],
+            "title": "Source Kind",
+            "default": "wellbeing"
+          },
+          "source_ref": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Ref"
+          }
+        },
+        "type": "object",
+        "required": [
+          "condition_score",
+          "pain_score",
+          "status",
+          "availability",
+          "restriction"
+        ],
+        "title": "WellbeingUpdateCreate"
+      },
+      "WellbeingUpdateResponse": {
+        "properties": {
+          "player": {
+            "$ref": "#/components/schemas/PlayerWellbeingResponse"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/HealthChangeResponse"
+            },
+            "type": "array",
+            "title": "Changes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "player",
+          "changes"
+        ],
+        "title": "WellbeingUpdateResponse"
       }
     },
     "securitySchemes": {

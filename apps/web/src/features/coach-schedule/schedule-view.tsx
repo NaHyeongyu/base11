@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   defaultTrainingPlayerData,
   type CalendarEvent,
@@ -9,7 +9,7 @@ import {
 } from "@/features/coach-schedule/data/schedule-preview-data";
 import { useScheduleStore } from "@/features/coach-schedule/model/schedule-store";
 import { ScheduleEventEditor } from "@/features/coach-schedule/schedule-event-editor";
-import { TrainingTemplateLibrary } from "@/features/coach-schedule/training-template-library";
+import { TrainingEventEditor } from "@/features/coach-schedule/training-event-editor";
 import { Icon } from "@/shared/ui/icon";
 
 const currentDay = 28;
@@ -30,12 +30,13 @@ type EditorState = {
 } | null;
 
 function EventCard({ event, compact = false }: { event: CalendarEvent; compact?: boolean }) {
+  const displayTitle = event.type === "training" ? "훈련" : event.title;
   return <Link
-    aria-label={`${event.title} 상세 보기`}
+    aria-label={`${displayTitle} 상세 보기`}
     className={`calendar-pill type-${event.type}`}
     href={`/schedule/${event.id}`}
   >
-    <strong>{event.title}</strong>
+    <strong>{displayTitle}</strong>
     {!compact && <small>{[event.time, event.duration ? `${event.duration}분` : event.detail].filter(Boolean).join(" · ")}</small>}
   </Link>;
 }
@@ -45,25 +46,22 @@ function CalendarHeader({
   events,
   onViewChange,
   onCreate,
-  onOpenTemplates,
 }: {
   view: "month" | "week";
   events: CalendarEvent[];
   onViewChange: (view: "month" | "week") => void;
   onCreate: () => void;
-  onOpenTemplates: () => void;
 }) {
   const trainingCount = events.filter((event) => event.type === "training").length;
-  const matchCount = events.filter((event) => event.type === "match").length;
   return <>
     <div className="calendar-page-header schedule-crud-header">
       <div>
-        <h1>{view === "month" ? "2026년 7월" : "7월 14일–20일"}</h1>
-        <p>전체 {events.length}개 · 훈련 {trainingCount}개 · 경기 {matchCount}개</p>
+        <h1>훈련 관리</h1>
+        <p>{view === "month" ? "2026년 7월" : "7월 14일–20일"} · 훈련 {trainingCount}개</p>
       </div>
       <div className="schedule-primary-actions">
-        <button className="template-button" onClick={onOpenTemplates}><Icon name="download" size={15} />템플릿</button>
-        <button className="training-create-button" onClick={onCreate}><Icon name="plus" size={16} />일정 추가</button>
+        <Link className="template-button" href="/schedule/templates"><Icon name="copy" size={15} />훈련 템플릿</Link>
+        <button className="training-create-button" onClick={onCreate}><Icon name="plus" size={16} />훈련 등록</button>
       </div>
     </div>
     <div className="calendar-toolbar">
@@ -130,9 +128,11 @@ function templateSeed(template: TrainingTemplate): CalendarEvent {
     id: "new",
     type: "training",
     day: currentDay,
+    date: `2026-07-${String(currentDay).padStart(2, "0")}`,
     time: "17:00",
-    title: template.title,
+    title: "훈련",
     duration: template.duration,
+    intensity: template.intensity,
     location: template.location,
     objective: template.objective,
     coachingPoints: template.coachingPoints,
@@ -145,31 +145,50 @@ function templateSeed(template: TrainingTemplate): CalendarEvent {
 export function ScheduleView() {
   const [view, setView] = useState<"month" | "week">("month");
   const [editor, setEditor] = useState<EditorState>(null);
-  const [templatesOpen, setTemplatesOpen] = useState(false);
   const [notice, setNotice] = useState("");
-  const { events, templates, createEvent, createTemplate, deleteTemplate } = useScheduleStore();
+  const queryHandled = useRef(false);
+  const { events, templates, createEvent, createTemplate } = useScheduleStore();
+  const trainingEvents = events.filter((event) => event.type === "training");
+
+  useEffect(() => {
+    if (queryHandled.current) return;
+    const requestedType = new URLSearchParams(window.location.search).get("create");
+    const templateId = new URLSearchParams(window.location.search).get("template");
+    if (requestedType === "training" || requestedType === "match") {
+      const template = requestedType === "training" ? templates.find((item) => item.id === templateId) : undefined;
+      setEditor({ type: requestedType, day: currentDay, seed: template ? templateSeed(template) : undefined });
+      queryHandled.current = true;
+    }
+  }, [templates]);
 
   function saveEvent(event: CalendarEvent) {
     const { id: _discardedId, ...input } = event;
     createEvent(input);
     setEditor(null);
-    setNotice(`${event.title} 일정을 만들었습니다.`);
+    setNotice(`${event.type === "training" ? "훈련" : event.title} 일정을 만들었습니다.`);
   }
 
   return <div className="calendar-page">
     <CalendarHeader
       view={view}
-      events={events}
+      events={trainingEvents}
       onViewChange={setView}
       onCreate={() => setEditor({ type: "training", day: currentDay })}
-      onOpenTemplates={() => setTemplatesOpen(true)}
     />
     {view === "month"
-      ? <MonthView events={events} onCreateAtDay={(day) => setEditor({ type: "training", day })} />
-      : <WeekView events={events} onCreateAtDay={(day) => setEditor({ type: "training", day })} />}
+      ? <MonthView events={trainingEvents} onCreateAtDay={(day) => setEditor({ type: "training", day })} />
+      : <WeekView events={trainingEvents} onCreateAtDay={(day) => setEditor({ type: "training", day })} />}
     {notice && <div className="schedule-toast" role="status"><Icon name="check" size={16} />{notice}<button onClick={() => setNotice("")} aria-label="알림 닫기"><Icon name="close" size={14} /></button></div>}
 
-    {editor && <ScheduleEventEditor
+    {editor?.type === "training" && <TrainingEventEditor
+      day={editor.day}
+      initialEvent={editor.seed}
+      templates={templates}
+      onClose={() => setEditor(null)}
+      onSave={saveEvent}
+    />}
+
+    {editor?.type === "match" && <ScheduleEventEditor
       mode="create"
       initialEvent={editor.seed}
       defaultType={editor.type}
@@ -180,19 +199,6 @@ export function ScheduleView() {
       onSaveTemplate={(template) => {
         createTemplate(template);
         setNotice(`${template.name} 템플릿을 저장했습니다.`);
-      }}
-    />}
-
-    {templatesOpen && <TrainingTemplateLibrary
-      templates={templates}
-      onClose={() => setTemplatesOpen(false)}
-      onDelete={(id) => {
-        deleteTemplate(id);
-        setNotice("내 템플릿을 삭제했습니다.");
-      }}
-      onUse={(template) => {
-        setTemplatesOpen(false);
-        setEditor({ type: "training", day: currentDay, seed: templateSeed(template) });
       }}
     />}
   </div>;

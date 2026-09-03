@@ -6,7 +6,7 @@ function notificationIcon(group: string) { if (group === "선수 상태") return
 
 export function NotificationsView() {
   return <>
-    <PageHeader eyebrow="INBOX" title="알림" description="팀 운영에서 놓치면 안 되는 변화와 마감 일정입니다." action={<button className="table-action">모두 읽음 처리</button>} />
+    <PageHeader eyebrow="확인할 소식" title="알림" description="선수 상태, 스태프 요청, 일정 변경을 확인합니다." action={<button className="table-action">모두 읽음</button>} />
     <div className="notification-layout">
       <Panel title="최근 알림" description="읽지 않은 알림 3개">
         <div className="notification-list">{notifications.map((item) => <article key={item.id} className={item.unread ? "unread" : ""}><span className={`notification-icon group-${item.group.replace(" ", "-")}`}><Icon name={notificationIcon(item.group)} /></span><div><span><Badge tone={item.unread ? "blue" : "gray"}>{item.group}</Badge>{item.unread && <i />}</span><strong>{item.title}</strong><p>{item.body}</p></div><button className="more-button"><Icon name="more" /></button></article>)}</div>

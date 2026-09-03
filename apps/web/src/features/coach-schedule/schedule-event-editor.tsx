@@ -5,6 +5,7 @@ import {
   defaultTrainingPlan,
   defaultTrainingPlayerData,
   type CalendarEvent,
+  type TrainingIntensity,
   type TrainingPlanBlock,
   type TrainingTemplate,
 } from "@/features/coach-schedule/data/schedule-preview-data";
@@ -28,6 +29,9 @@ function createBlock(): TrainingPlanBlock {
     id: `block-${Date.now().toString(36)}`,
     title: "새 훈련 블록",
     duration: 15,
+    intensity: "Medium",
+    group: "전체",
+    setup: "구역 크기·인원·장비를 입력하세요.",
     point: "핵심 코칭 포인트를 입력하세요.",
   };
 }
@@ -45,9 +49,11 @@ function buildDraft(initialEvent?: CalendarEvent, defaultType: EditableEventType
     id: "new",
     type,
     day: defaultDay,
+    date: `2026-07-${String(defaultDay).padStart(2, "0")}`,
     time: type === "training" ? "17:00" : "15:00",
     duration: type === "training" ? 100 : 110,
-    title: type === "training" ? "새 팀 훈련" : "새 경기",
+    title: type === "training" ? "훈련" : "새 경기",
+    intensity: type === "training" ? "Medium" : undefined,
     location: "보조구장",
     objective: type === "training" ? "이번 세션에서 달성할 목적을 입력하세요." : undefined,
     coachingPoints: type === "training" ? "선수에게 반복해서 전달할 핵심 포인트를 입력하세요." : undefined,
@@ -89,8 +95,10 @@ export function ScheduleEventEditor({
         return {
           ...current,
           type,
-          title: current.title === "새 경기" ? "새 팀 훈련" : current.title,
+          title: "훈련",
           duration: current.duration ?? 100,
+          date: current.date ?? `2026-07-${String(current.day).padStart(2, "0")}`,
+          intensity: current.intensity ?? "Medium",
           objective: current.objective ?? "이번 세션에서 달성할 목적을 입력하세요.",
           coachingPoints: current.coachingPoints ?? "핵심 코칭 포인트를 입력하세요.",
           planBlocks: current.planBlocks?.length ? current.planBlocks : defaultTrainingPlan.map((block) => ({ ...block })),
@@ -100,7 +108,7 @@ export function ScheduleEventEditor({
       return {
         ...current,
         type,
-        title: current.title === "새 팀 훈련" ? "새 경기" : current.title,
+        title: current.title === "훈련" ? "새 경기" : current.title,
         opponent: current.opponent ?? "상대 팀",
         competition: current.competition ?? "대회·리그",
       };
@@ -127,8 +135,8 @@ export function ScheduleEventEditor({
     setDraft((current) => ({
       ...current,
       type: "training",
-      title: template.title,
       duration: template.duration,
+      intensity: template.intensity,
       location: template.location,
       objective: template.objective,
       coachingPoints: template.coachingPoints,
@@ -141,9 +149,9 @@ export function ScheduleEventEditor({
   function saveTemplate() {
     if (!training) return;
     onSaveTemplate({
-      name: templateName.trim() || `${draft.title} 템플릿`,
-      title: draft.title,
+      name: templateName.trim() || `7월 ${draft.day}일 훈련 템플릿`,
       duration: blockDuration || draft.duration || 0,
+      intensity: draft.intensity ?? "Medium",
       location: draft.location ?? "",
       objective: draft.objective ?? "",
       coachingPoints: draft.coachingPoints ?? "",
@@ -158,6 +166,7 @@ export function ScheduleEventEditor({
     event.preventDefault();
     onSave({
       ...draft,
+      title: training ? "훈련" : draft.title,
       duration: training && blockDuration ? blockDuration : draft.duration,
       detail: training ? draft.objective : draft.competition,
     });
@@ -195,9 +204,15 @@ export function ScheduleEventEditor({
             <section className="editor-form-section">
               <header><span>01</span><div><h3>기본 정보</h3><p>캘린더와 선수 화면에 표시되는 정보입니다.</p></div></header>
               <div className="editor-field-grid">
-                <label className="span-2"><span>{training ? "훈련명" : "경기명"}</span><input required value={draft.title} onChange={(event) => updateField("title", event.target.value)} /></label>
-                <label><span>7월 날짜</span><input required min={1} max={31} type="number" value={draft.day} onChange={(event) => updateField("day", Number(event.target.value))} /></label>
+                {!training && <label className="span-2"><span>경기명</span><input required value={draft.title} onChange={(event) => updateField("title", event.target.value)} /></label>}
+                <label><span>{training ? "훈련 날짜" : "경기 날짜"}</span><input required type="date" value={draft.date ?? `2026-07-${String(draft.day).padStart(2, "0")}`} onChange={(event) => {
+                  const nextDate = event.target.value;
+                  updateField("date", nextDate);
+                  updateField("day", Number(nextDate.slice(-2)));
+                }} /></label>
                 <label><span>시작 시간</span><input required type="time" value={draft.time ?? ""} onChange={(event) => updateField("time", event.target.value)} /></label>
+                {training && <label><span>훈련 강도</span><select value={draft.intensity ?? "Medium"} onChange={(event) => updateField("intensity", event.target.value as TrainingIntensity)}><option value="Low">낮음 · Low</option><option value="Medium">보통 · Medium</option><option value="High">높음 · High</option></select></label>}
+                {training && <label><span>총 훈련 시간</span><input readOnly value={`${blockDuration || draft.duration || 0}분`} /></label>}
                 <label><span>장소</span><input required value={draft.location ?? ""} onChange={(event) => updateField("location", event.target.value)} /></label>
                 {!training && <>
                   <label><span>상대 팀</span><input required value={draft.opponent ?? ""} onChange={(event) => updateField("opponent", event.target.value)} /></label>
@@ -220,9 +235,12 @@ export function ScheduleEventEditor({
               <div className="training-block-editor">
                 {draft.planBlocks?.map((block, index) => <article key={block.id}>
                   <span>{String(index + 1).padStart(2, "0")}</span>
-                  <label><small>훈련 내용</small><input value={block.title} onChange={(event) => updateBlock(block.id, { title: event.target.value })} /></label>
-                  <label><small>시간</small><input min={5} step={5} type="number" value={block.duration} onChange={(event) => updateBlock(block.id, { duration: Number(event.target.value) })} /></label>
-                  <label><small>코칭 포인트</small><input value={block.point} onChange={(event) => updateBlock(block.id, { point: event.target.value })} /></label>
+                  <label className="block-title"><small>세션 내용</small><input value={block.title} onChange={(event) => updateBlock(block.id, { title: event.target.value })} /></label>
+                  <label className="block-duration"><small>시간</small><input min={5} step={5} type="number" value={block.duration} onChange={(event) => updateBlock(block.id, { duration: Number(event.target.value) })} /></label>
+                  <label className="block-intensity"><small>강도</small><select value={block.intensity ?? "Medium"} onChange={(event) => updateBlock(block.id, { intensity: event.target.value as TrainingIntensity })}><option>Low</option><option>Medium</option><option>High</option></select></label>
+                  <label className="block-group"><small>참여 대상</small><input value={block.group ?? "전체"} onChange={(event) => updateBlock(block.id, { group: event.target.value })} /></label>
+                  <label className="block-setup"><small>운영 형태·구역·장비</small><input value={block.setup ?? ""} onChange={(event) => updateBlock(block.id, { setup: event.target.value })} /></label>
+                  <label className="block-point"><small>코칭 포인트</small><input value={block.point} onChange={(event) => updateBlock(block.id, { point: event.target.value })} /></label>
                   <button type="button" onClick={() => removeBlock(block.id)} aria-label={`${block.title} 삭제`}><Icon name="close" size={15} /></button>
                 </article>)}
                 <button type="button" className="add-training-block" onClick={() => setDraft((current) => ({ ...current, planBlocks: [...(current.planBlocks ?? []), createBlock()] }))}><Icon name="plus" size={15} />훈련 블록 추가</button>

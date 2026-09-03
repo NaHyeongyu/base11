@@ -15,6 +15,12 @@ from clubhaus.modules.coaching.infrastructure.models.player_development import (
 )
 from clubhaus.modules.coaching.infrastructure.models.publications import PublicationModel
 from clubhaus.modules.coaching.infrastructure.models.staff_reviews import StaffReviewModel
+from clubhaus.modules.coaching.infrastructure.models.wellbeing import (
+    InjuryCaseModel,
+    PlayerAvailabilityDecisionModel,
+    PlayerHealthChangeModel,
+    PlayerReadinessModel,
+)
 
 __all__ = [
     "ChangeLogModel",
@@ -28,4 +34,8 @@ __all__ = [
     "SessionBlockModel",
     "StaffReviewModel",
     "TrainingSessionModel",
+    "InjuryCaseModel",
+    "PlayerAvailabilityDecisionModel",
+    "PlayerHealthChangeModel",
+    "PlayerReadinessModel",
 ]

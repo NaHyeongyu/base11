@@ -95,12 +95,12 @@ export function FeedbackView() {
     <div className="improvement-page">
       <header className="improvement-header">
         <div>
-          <p className="page-eyebrow">COACH-APPROVED IMPROVEMENT LOOP</p>
-          <h1>{workspace === "recommendations" ? "추천 개선 과제" : "선수 개선 추적"}</h1>
+          <p className="page-eyebrow">지도자 검토</p>
+          <h1>{workspace === "recommendations" ? "개선 과제 검토" : "진행 확인"}</h1>
           <p>
             {workspace === "recommendations"
-              ? "코치는 부족 항목과 근거를 확인하고 추천된 처방만 승인합니다."
-              : "자동 처방의 실행 기록과 다음 현장 점검을 한 타임라인으로 확인합니다."}
+              ? "훈련·경기 기록에서 확인된 항목을 검토하고 선수에게 전달할 내용을 정리합니다."
+              : "전달한 과제의 실행 기록과 다음 현장 점검을 확인합니다."}
           </p>
         </div>
         <nav className="workspace-switcher" aria-label="개선 과제 화면 전환">
@@ -109,14 +109,14 @@ export function FeedbackView() {
             onClick={() => setWorkspace("recommendations")}
             aria-pressed={workspace === "recommendations"}
           >
-            추천 과제
+            과제 검토
           </button>
           <button
             className={workspace === "tracking" ? "active" : ""}
             onClick={() => setWorkspace("tracking")}
             aria-pressed={workspace === "tracking"}
           >
-            선수 개선 추적
+            진행 확인
           </button>
         </nav>
       </header>
@@ -201,7 +201,7 @@ function RecommendationWorkspace({
   return (
     <>
       <div className="improvement-toolbar">
-        <div className="status-tabs" role="tablist" aria-label="추천 과제 상태">
+        <div className="status-tabs" role="tablist" aria-label="개선 과제 상태">
           {statusTabs.map((tab) => (
             <button
               key={tab.id}
@@ -218,8 +218,8 @@ function RecommendationWorkspace({
       </div>
 
       <div className="metric-grid four compact improvement-metrics">
-        <MetricCard label="검토 대기" value="8건" helper="오늘 추천 3건" tone="orange" />
-        <MetricCard label="자동 추천 정확도" value="87%" helper="코치 승인 기준" tone="blue" />
+        <MetricCard label="검토 대기" value="8건" helper="오늘 추가 3건" tone="orange" />
+        <MetricCard label="근거 연결" value="87%" helper="훈련·경기 기록 기준" tone="blue" />
         <MetricCard label="이번 주 전달" value="21건" helper="선수 18명" tone="green" />
         <MetricCard label="다음 점검" value="6건" helper="48시간 이내" tone="purple" />
       </div>
@@ -227,7 +227,7 @@ function RecommendationWorkspace({
       <div className="recommendation-workspace">
         <section className="recommendation-queue-panel">
           <header>
-            <div><h2>추천 대기열</h2><p>반복 신호와 우선순위 기준</p></div>
+            <div><h2>검토 목록</h2><p>반복 기록과 우선순위 기준</p></div>
             <Badge tone="orange">{visibleRecommendations.length}건 표시</Badge>
           </header>
           <div className="recommendation-queue">
@@ -252,7 +252,7 @@ function RecommendationWorkspace({
               <div className="recommendation-empty">
                 <Icon name="check" size={22} />
                 <strong>이 상태의 과제가 없습니다.</strong>
-                <p>새로운 추천이 들어오면 여기에 표시됩니다.</p>
+                <p>확인할 항목이 생기면 여기에 표시됩니다.</p>
               </div>
             )}
           </div>
@@ -263,17 +263,17 @@ function RecommendationWorkspace({
           <header className="recommendation-detail-header">
             <div>
               <span>{selected.player.name} · {selected.player.position}</span>
-              <Badge tone={categoryTone(selected.category)}>자동 추천</Badge>
+              <Badge tone={categoryTone(selected.category)}>검토 제안</Badge>
               <h2>{selected.issue}</h2>
-              <p>최근 훈련 태그 2회와 경기 메모 1회를 근거로 생성됨</p>
+              <p>최근 훈련 태그 2회와 경기 메모 1회에서 같은 항목을 확인했습니다.</p>
             </div>
             <button className="more-button" aria-label="과제 더보기"><Icon name="more" /></button>
           </header>
 
           <div className="prescription-section prescription-drills">
-            <span className="section-kicker">추천 훈련</span>
+            <span className="section-kicker">훈련 제안</span>
             {isEditing ? (
-              <textarea value={draftDrills} onChange={(event) => onDraftDrillsChange(event.target.value)} aria-label="추천 훈련 수정" />
+              <textarea value={draftDrills} onChange={(event) => onDraftDrillsChange(event.target.value)} aria-label="훈련 제안 수정" />
             ) : (
               <ol>{selected.drills.map((drill) => <li key={drill}>{drill}</li>)}</ol>
             )}
@@ -295,11 +295,11 @@ function RecommendationWorkspace({
         </section>
 
         <aside className="recommendation-evidence-panel">
-          <header><h2>추천 근거</h2><p>추천이 만들어진 신호입니다.</p></header>
+          <header><h2>연결 근거</h2><p>과제와 연결된 현장 기록입니다.</p></header>
           <div className="evidence-card">
             <Badge tone="purple">{selected.evidence.tag}</Badge>
             <p>{selected.evidence.matchNote}</p>
-            <span>추천 신뢰도 <strong>{selected.evidence.confidence}</strong></span>
+            <span>근거 일치도 <strong>{selected.evidence.confidence}</strong></span>
           </div>
 
           <div className="visibility-section">
@@ -311,7 +311,7 @@ function RecommendationWorkspace({
 
           <div className="approval-warning">
             <Icon name="shield" size={18} />
-            <div><strong>자동 전달하지 않습니다.</strong><p>코치 승인 이후에만 선수 과제로 게시됩니다.</p></div>
+            <div><strong>지도자가 확인한 뒤 전달합니다.</strong><p>검토가 끝난 과제만 선수에게 전달됩니다.</p></div>
           </div>
 
           <div className="approval-actions">
@@ -350,7 +350,7 @@ function TrackingWorkspace({
 }) {
   const player = improvementRecommendations[0].player;
   const timeline = [
-    { date: "7/25 18:42", title: "코치 승인·전달", detail: "추천 근거 확인 후 선수 과제로 게시", tone: "done" },
+    { date: "7/25 18:42", title: "코치 승인·전달", detail: "연결 근거 확인 후 선수 과제로 게시", tone: "done" },
     { date: "7/26 20:10", title: "개인 훈련 완료", detail: "벽 패스 방향 터치 30회 · 선수 기록", tone: "done" },
     { date: "7/28 예정", title: "개인 훈련 2회차", detail: "오픈 바디 터치 3세트", tone: "next" },
     { date: "7/30 훈련", title: "코치 현장 점검", detail: "성공 기준과 실제 수행 비교", tone: "review" },
@@ -374,7 +374,7 @@ function TrackingWorkspace({
       <div className="tracking-workspace">
         <section className="tracking-main-panel">
           <header>
-            <div><span>진행 중 · 기술</span><h2>압박 상황에서 첫 터치 방향 만들기</h2><p>추천 처방 승인 이후 선수 실행과 코치 점검을 이어서 관리합니다.</p></div>
+            <div><span>진행 중 · 기술</span><h2>압박 상황에서 첫 터치 방향 만들기</h2><p>과제 전달 이후 선수 실행과 코치 점검을 이어서 관리합니다.</p></div>
             <Badge tone="blue">진행 중</Badge>
           </header>
 

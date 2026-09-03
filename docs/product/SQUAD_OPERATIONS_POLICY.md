@@ -1,12 +1,13 @@
 # 선수단 운영 정책
 
 > 상태: Draft
-> 버전: 0.1
-> 최종 수정: 2026-07-26
+> 버전: 0.2
+> 최종 수정: 2026-08-22
 > 관리 주체: Product / Coaching
 > 적용 범위: Coach Desktop, Player Mobile, Parent Mobile, API, Analytics
 > Figma 기준 화면: `08 Multi-Squad Policy & Wireframes`
 > 상위 제품 기획: [BASE11 제품 기획서](./PRODUCT_SPEC.md)
+> 선수 등록 기준: [팀·선수 등록 및 관리 정책](./TEAM_PLAYER_MANAGEMENT_POLICY.md)
 
 ## 1. 목적
 
@@ -29,7 +30,7 @@
 
 | 용어 | 의미 | 예시 |
 | --- | --- | --- |
-| 팀 | 하나의 코칭 조직과 시즌 운영 단위 | FC 안양 고등부 |
+| 팀 | 여러 시즌 동안 유지되는 지도자 운영 단위 | FC 안양 고등부 |
 | 시즌 | 소속과 기록의 기준 기간 | 2026 시즌 |
 | 공식 스쿼드 | 연령·등록 기준의 주 소속 | U16, U17, U18 |
 | 운영 그룹 | 실제 훈련 목적에 따라 만든 유동 그룹 | 1군 준비조, 재활조, GK 그룹 |

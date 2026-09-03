@@ -13,7 +13,7 @@ export function PerformanceView() {
   const [fileName, setFileName] = useState("");
 
   return <>
-    <PageHeader eyebrow="VENDOR-NEUTRAL DATA" title="퍼포먼스 데이터" description="GPS 업체가 달라도 Excel·CSV 열을 한 번 매핑하면 세션과 선수 기준으로 같은 구조에 누적합니다." action={<button className="action-button" onClick={() => inputRef.current?.click()}><Icon name="download" size={17} />파일 가져오기</button>} />
+    <PageHeader eyebrow="훈련·경기 데이터" title="퍼포먼스 데이터" description="GPS·RPE 파일을 세션과 선수에 연결하고 누락된 데이터만 확인합니다." action={<button className="action-button" onClick={() => inputRef.current?.click()}><Icon name="download" size={17} />파일 가져오기</button>} />
     <input ref={inputRef} hidden type="file" accept=".xlsx,.xls,.csv" onChange={(event) => { const file = event.target.files?.[0]; if (file) { setFileName(file.name); setStep("mapping"); } }} />
     <div className="metric-grid four compact">
       <MetricCard label="연결 세션" value="18 / 21" helper="최근 30일" tone="blue" />
